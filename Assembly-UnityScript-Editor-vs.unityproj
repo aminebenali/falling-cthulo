@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{E809BEE8-A1B7-0AAB-8F4E-EE4D83D47E63}</ProjectGuid>
+	<ProjectGuid>{B21A1FFA-6F85-5DB0-3218-633CE33FD70A}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,6 +47,14 @@
      <Compile Include="Assets\Editor\BakeMaterial.js" />
      <Compile Include="Assets\Editor\CopyVariables.js" />
      <Compile Include="Assets\Editor\CreateSkybox.js" />
+     <None Include="Assets\Wet Surface Shaders\Wet Diffuse Reflective.shader" />
+     <None Include="Assets\iTween\ReadMe!\ReadMe!.txt" />
+     <None Include="Assets\Wet Surface Shaders\Wet Specular.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimLight.shader" />
+     <None Include="Assets\Wet Surface Shaders\Wet Diffuse.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimAlpha.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
  <Reference Include="Assembly-UnityScript">
  <HintPath>Library\ScriptAssemblies\Assembly-UnityScript.dll</HintPath>
  </Reference>
@@ -71,6 +79,10 @@
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-vs.csproj">
+      <Project>{88A06FA4-14DA-0B2E-22FE-A377BBF51CBF}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
