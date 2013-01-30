@@ -27,7 +27,7 @@ function Update()
     moveDirection = transform.TransformDirection(moveDirection);
 
     if (controller.collisionFlags == CollisionFlags.None)
-        print("Free floating!");
+        //print("Free floating!");
         
     if (controller.collisionFlags == CollisionFlags.Sides)
         print("Only touching sides");
@@ -39,7 +39,7 @@ function Update()
         print("Something above");
 	
 
-	
+	ApplyConstraits ();
 	// Calculate Gravity
 	//gravity = 1.0-moveDirection.normalized * gravity;
 	
@@ -50,5 +50,18 @@ function Update()
     controller.Move(moveDirection * Time.deltaTime);
 }
 
-
+function ApplyConstraits ()
+{
+	if (transform.position.x > 5)
+		transform.position.x = 5;
+	
+ 	if (transform.position.x < -5)
+		transform.position.x = -5;
+	
+	if (transform.position.y > 5)
+		transform.position.y = 5;
+	
+ 	if (transform.position.y < -5)
+		transform.position.y = -5;
+}
 @script RequireComponent(CharacterController)
