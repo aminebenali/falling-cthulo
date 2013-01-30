@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{C6BC71F0-2853-D62F-8C3A-7584B5CD773B}</ProjectGuid>
+	<ProjectGuid>{41B484DE-0EFD-FEF3-DD22-1C4B18D44725}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -45,6 +45,15 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Billboard.js" />
+     <Compile Include="Assets\Scripts\LightManager.js" />
+     <None Include="Assets\Wet Surface Shaders\Wet Diffuse Reflective.shader" />
+     <None Include="Assets\iTween\ReadMe!\ReadMe!.txt" />
+     <None Include="Assets\Wet Surface Shaders\Wet Specular.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimLight.shader" />
+     <None Include="Assets\Wet Surface Shaders\Wet Diffuse.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimAlpha.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch_RimOutline.shader" />
+     <None Include="Assets\Toony Gooch\Shaders\Toony_Gooch.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
