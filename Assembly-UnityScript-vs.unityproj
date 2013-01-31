@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\LevelManager.js" />
      <Compile Include="Assets\Scripts\LightManager.js" />
      <Compile Include="Assets\Scripts\PlayerMovement.js" />
+     <Compile Include="Assets\Scripts\PlayerStatus.js" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
