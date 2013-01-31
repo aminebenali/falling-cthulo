@@ -1,7 +1,7 @@
 //PlayerMovement 30/1/2013
 //How to use: Put this code into your player prefab
 //What it does: Move the character to the sides when acelerates and apply gravity. Also constraits the character.
-//Last Modified: 30/1/2013
+//Last Modified: 31/1/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -16,9 +16,10 @@ var yConstrait : float = 2.5; //Constrait distance on Y axis
 
 private var finalGravity : float;//The final gravity value
 private var moveDirection : Vector3 = Vector3.zero; //Move Direction Vector
-private var constraitTimer : float = 0;
-private var isCorrectingPosition : boolean = false;
-private var isCorrectingPositionOldValue : boolean = false;
+private var constraitTimer : float = 0;//Timer to Lerp between actual position and the desired position of the bound
+private var isCorrectingPosition : boolean = false;//isCorrectingPosition?
+private var isCorrectingPositionOldValue : boolean = false;//The Old Value from isCorrectingPosition
+private var controller : CharacterController; //Character Controller Reference
 
 @script AddComponentMenu("Characters/Cthulo Movement")
 
@@ -29,24 +30,12 @@ function Start ()
 
 function Update()
 {
-    var controller : CharacterController = GetComponent(CharacterController);
+    controller = GetComponent(CharacterController);
     //Velocity Adjustment
 	zSpeed += Time.deltaTime;
 
     moveDirection = Vector3(Input.GetAxis("Horizontal") * xSpeed, Input.GetAxis("Vertical")*ySpeed, zSpeed);
     moveDirection = transform.TransformDirection(moveDirection);
-
-    if (controller.collisionFlags == CollisionFlags.None)
-        //print("Free floating!");
-        
-    if (controller.collisionFlags == CollisionFlags.Sides)
-        print("Only touching sides");
-        
-    if (controller.collisionFlags == CollisionFlags.Above)
-        print("Touching ground!");
-
-    if (controller.collisionFlags == CollisionFlags.Below)
-        print("Something above");
 	
 	// Calculate Gravity
 	//gravity = 1.0-moveDirection.normalized * gravity;
@@ -58,6 +47,33 @@ function Update()
 
     // Move the controller
     controller.Move(moveDirection * Time.deltaTime);
+}
+
+
+function OnControllerColliderHit (hit : ControllerColliderHit)
+{
+
+		
+	if (controller.collisionFlags & CollisionFlags.Sides)
+	{
+		if (transform.position.z < hit.transform.position.z)
+			if (zSpeed > 1)
+				zSpeed /= 2; //HeadHit
+	}
+        
+	if (controller.collisionFlags == CollisionFlags.None) //Free Floating
+	{
+
+	}
+        
+    if (controller.collisionFlags == CollisionFlags.Sides)
+        print("Only touching sides");
+        
+    if (controller.collisionFlags == CollisionFlags.Above)
+        print("Touching ground!");
+
+    if (controller.collisionFlags == CollisionFlags.Below)
+        print("Something above");
 }
 
 function ApplyConstraits ()//Not good solution yet. Cthulo still bouncing at boundaries
