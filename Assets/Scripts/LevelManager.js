@@ -8,7 +8,8 @@
 
 var parts : GameObject[]; //Put here all cenario sequences
 var depth : float = 100; //Default cenario sequence depth
-private var depthMultiplyer = 0; // Works like an index to depth control
+private var depthMultiplyer : float = 0; // Works like an index to depth control
+private var lastPart : GameObject; //Last Instantiated sequence
 
 function Start ()
 {
@@ -23,12 +24,24 @@ function Update ()
 
 function NewPart ()
 {
-	Instantiate (parts[Random.Range(0,parts.Length)],Vector3(0,0,depthMultiplyer*depth),Quaternion.identity);
+	lastPart = Instantiate (parts[Random.Range(0,parts.Length)],Vector3(0,0,depthMultiplyer*depth),Quaternion.identity);
 	depthMultiplyer ++;
 	transform.position.z = depth * (depthMultiplyer-1);
 }
 
 function OnTriggerEnter (other : Collider)
 {
+	NewPart();
+}
+
+function OnDeath ()
+{
+	var sequences : GameObject[];
+	sequences = GameObject.FindGameObjectsWithTag("Sequence");
+	for (var i : int = 0; i < sequences.Length;i++)
+		Destroy(sequences[i].transform.root.gameObject);
+		
+	depthMultiplyer = 0;
+	NewPart();
 	NewPart();
 }
