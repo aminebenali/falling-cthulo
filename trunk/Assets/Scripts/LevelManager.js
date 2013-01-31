@@ -1,6 +1,7 @@
 //Level Manager
 //How to use: Put this code into your player prefab
 //What it does: Move the character to the sides when acelerates and apply gravity. Also constraits the character.
+//Last Modified:
 //by Yves J. Albuquerque
 
 #pragma strict

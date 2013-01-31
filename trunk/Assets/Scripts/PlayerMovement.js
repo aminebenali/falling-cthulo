@@ -1,6 +1,7 @@
 //PlayerMovement 30/1/2013
 //How to use: Put this code into your player prefab
 //What it does: Move the character to the sides when acelerates and apply gravity. Also constraits the character.
+//Last Modified: 30/1/2013
 //by Yves J. Albuquerque
 
 #pragma strict
