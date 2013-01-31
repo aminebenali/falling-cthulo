@@ -32,7 +32,7 @@ function Update()
 {
     controller = GetComponent(CharacterController);
     //Velocity Adjustment
-	zSpeed += Time.deltaTime;
+	zSpeed += (2*Time.deltaTime);
 
     moveDirection = Vector3(Input.GetAxis("Horizontal") * xSpeed, Input.GetAxis("Vertical")*ySpeed, zSpeed);
     moveDirection = transform.TransformDirection(moveDirection);
@@ -124,5 +124,10 @@ function ApplyConstraits ()//Not good solution yet. Cthulo still bouncing at bou
 	}
 	
 	isCorrectingPositionOldValue = isCorrectingPosition;
+}
+
+function OnDeath ()
+{
+	transform.position.z=0;
 }
 @script RequireComponent(CharacterController)

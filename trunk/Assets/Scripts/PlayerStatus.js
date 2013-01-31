@@ -1,3 +1,9 @@
+//Playerstatus 31/1/2013
+//How to use: Put this code into the Player Game Object
+//What it does: Manage the distance, life and velocity of the Player
+//Last Modified: 31/1/2013
+//by Yves J. Albuquerque
+
 #pragma strict
 
 public static var distance : float;
@@ -15,7 +21,11 @@ function Update ()
     velocity = controller.velocity.z;
     distance = transform.position.z;
     if (life < 0)
-    	Death ();
+    {
+    	SendMessage ("OnDeath");
+    	gameObject.Find("Game Manager").SendMessage("OnDeath");
+    }
+    	
     if (life > 100)
     	life = 100;
     else
@@ -24,14 +34,15 @@ function Update ()
     print (life);
 }
 
-function Death ()
+function OnDeath ()
 {
-	print ("death");
+	print ("Player Status Death");
+	life = 100;
 }
 
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {
 	if (controller.collisionFlags & CollisionFlags.Sides)
 		if (transform.position.z < hit.transform.position.z)
-			life -= velocity;
+			life -= (3*velocity);
 }
