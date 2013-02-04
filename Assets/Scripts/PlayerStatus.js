@@ -10,6 +10,7 @@ public static var distance : float;
 public static var life : float = 100;
 public static var velocity : float;
 private var controller : CharacterController;
+private var invunerable : boolean;
 
 function Start ()
 {
@@ -30,8 +31,7 @@ function Update ()
     	life = 100;
     else
     	life += Time.deltaTime;
-    
-    print (life);
+    print (velocity);
 }
 
 function OnDeath ()
@@ -44,5 +44,9 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 {
 	if (controller.collisionFlags & CollisionFlags.Sides)
 		if (transform.position.z < hit.transform.position.z)
+		{
 			life -= (3*velocity);
+			//hit.collider.enabled = false;
+		}
+
 }

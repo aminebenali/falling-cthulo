@@ -14,6 +14,8 @@ var gravity : float = 10.0;//Gravity Speed Control
 var xConstrait : float = 2.5; //Constrait distance on X axis
 var yConstrait : float = 2.5; //Constrait distance on Y axis
 
+var cThulo : GameObject;
+
 private var finalGravity : float;//The final gravity value
 private var moveDirection : Vector3 = Vector3.zero; //Move Direction Vector
 private var constraitTimer : float = 0;//Timer to Lerp between actual position and the desired position of the bound
@@ -35,6 +37,7 @@ function Update()
 	zSpeed += (2*Time.deltaTime);
 
     moveDirection = Vector3(Input.GetAxis("Horizontal") * xSpeed, Input.GetAxis("Vertical")*ySpeed, zSpeed);
+    cThulo.transform.LookAt (moveDirection + transform.position);
     moveDirection = transform.TransformDirection(moveDirection);
 	
 	// Calculate Gravity
@@ -44,7 +47,6 @@ function Update()
     moveDirection.y -= gravity * Time.deltaTime;
     
     ApplyConstraits ();
-
     // Move the controller
     controller.Move(moveDirection * Time.deltaTime);
 }
@@ -80,12 +82,8 @@ function ApplyConstraits ()//Not good solution yet. Cthulo still bouncing at bou
 {
 	constraitTimer += Time.deltaTime;
 	
-	if (isCorrectingPosition != isCorrectingPositionOldValue)
-	{
-		constraitTimer = 0;
-	}
 
-	if ((transform.position.x < xConstrait) && (transform.position.x > -xConstrait)) //Left-Right Ok
+	if ((transform.position.x < xConstrait) && (transform.position.x > -xConstrait) &&  (transform.position.y < yConstrait) && (transform.position.y > -yConstrait)) //Left-Right Ok
 	{
 		isCorrectingPosition = false;
 	}
@@ -95,32 +93,28 @@ function ApplyConstraits ()//Not good solution yet. Cthulo still bouncing at bou
 		
 		if (transform.position.x > xConstrait)
 		{
-			moveDirection.x = Mathf.Lerp(moveDirection.x, -1, constraitTimer);
+			moveDirection.x = Mathf.Lerp(0, -xSpeed, constraitTimer);
 		}
 		
 	 	if (transform.position.x < -xConstrait)
 	 	{
-			moveDirection.x = Mathf.Lerp(moveDirection.x, 1, constraitTimer);
+			moveDirection.x = Mathf.Lerp(0, xSpeed, constraitTimer);
 		}
-	}
-	
-	if ((transform.position.y < yConstrait) && (transform.position.y > -yConstrait)) //Up-Down Ok
-	{
-		isCorrectingPosition = false;
-	}
-	else
-	{
-		isCorrectingPosition = true;
 		
 		if (transform.position.y > yConstrait)
 		{
-			moveDirection.y = Mathf.Lerp(moveDirection.y, -1, constraitTimer);
+			moveDirection.y = Mathf.Lerp(0, -ySpeed, constraitTimer);
 		}
 		
 	 	if (transform.position.y < -yConstrait)
 	 	{
-			moveDirection.y = Mathf.Lerp(moveDirection.y, 1, constraitTimer);
+			moveDirection.y = Mathf.Lerp(0, ySpeed, constraitTimer);
 		}
+	}
+	
+	if (isCorrectingPosition != isCorrectingPositionOldValue)
+	{
+		constraitTimer = 0;
 	}
 	
 	isCorrectingPositionOldValue = isCorrectingPosition;
