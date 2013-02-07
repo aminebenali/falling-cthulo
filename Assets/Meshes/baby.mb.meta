@@ -87,7 +87,7 @@ ModelImporter:
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
-    bakeSimulation: 0
+    bakeSimulation: 1
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
