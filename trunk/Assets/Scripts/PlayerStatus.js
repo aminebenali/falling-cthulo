@@ -6,15 +6,21 @@
 
 #pragma strict
 
-public static var distance : float;
+public static var distance : float = 0;
 public static var life : float = 100;
-public static var velocity : float;
+public static var velocity : float = 0;
+public static var coin : int = 0;
+public var miasma : Light;
+public var turbilhaoDeVelocidade : ParticleSystem;
 private var controller : CharacterController;
 private var invunerable : boolean;
 
 function Start ()
 {
     controller = GetComponent(CharacterController);
+    miasma = GameObject.Find("Miasma").GetComponent(Light);
+    //turbilhaoDeVelocidade = GameObject.Find("Turbilhao De Velocidade").GetComponent(ParticleSystem);
+
 }
 
 function Update ()
@@ -31,7 +37,9 @@ function Update ()
     	life = 100;
     else
     	life += Time.deltaTime;
-    print (velocity);
+    
+    miasma.intensity = life/50;
+    turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/100;
 }
 
 function OnDeath ()
@@ -48,5 +56,4 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 			life -= (3*velocity);
 			//hit.collider.enabled = false;
 		}
-
 }

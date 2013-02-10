@@ -8,12 +8,15 @@
 
 var parts : GameObject[]; //Put here all cenario sequences
 var depth : float = 100; //Default cenario sequence depth
+var placa : GameObject; //Marcador de Distancia
 private var depthMultiplyer : float = 0; // Works like an index to depth control
 private var lastPart : GameObject; //Last Instantiated sequence
 
 function Start ()
 {
+	NewMarkers ();
 	NewPart();
+	NewMarkers ();
 	NewPart();
 }
 
@@ -29,8 +32,18 @@ function NewPart ()
 	transform.position.z = depth * (depthMultiplyer-1);
 }
 
+function NewMarkers ()
+{
+	for (var i = 0; i < 9; i++)
+	{
+		lastPart = Instantiate (placa,Vector3(-7,-5,(depthMultiplyer*depth) + (i*10)),Quaternion.identity);
+		lastPart = Instantiate (placa,Vector3(7,-5,(depthMultiplyer*depth) + (i*10)),Quaternion.identity);
+	}
+}
+
 function OnTriggerEnter (other : Collider)
 {
+	NewMarkers ();
 	NewPart();
 }
 
