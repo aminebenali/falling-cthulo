@@ -1,7 +1,7 @@
 //SmoothFollowCthulo 30/01/2013
 //How to use: Put this code into the Main Camera.
 //What it does: Follows the target Player
-//Last Modified: 31/1/2013
+//Last Modified: 12/2/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -14,6 +14,9 @@ var height = 5.0; // the height we want the camera to be above the target
 var heightDamping = 2.0; // Height Damping
 var sideDamping = 3.0; // Rotation Damping
 var distanceDamping = 7.0; // Distance Damping
+
+var fixedCameraMode : boolean = false;
+
 @script AddComponentMenu("Camera-Control/Smooth Follow Cthulo")
 
 function Awake ()
@@ -33,7 +36,7 @@ function LateUpdate ()
 	if (playerCharacterController.velocity.magnitude < 50)
 		wantedDistance -= playerCharacterController.velocity.magnitude/10;
 	else
-		wantedDistance -= 5;
+		wantedDistance -= distance;
 
 	var currentSide = transform.position.x;
 	var currentHeight = transform.position.y;
@@ -54,15 +57,26 @@ function LateUpdate ()
 	//transform.position = target.position;
 	//transform.position -= Vector3.forward * distance;
 
-	// Set the side of the camera
-	transform.position.x = currentSide;
-	
-	// Set the height of the camera
-	transform.position.y = currentHeight;
-	
-	// Set the height of the camera
-	transform.position.z = currentDistance;
+	if (fixedCameraMode)
+	{
+		// Set the distance of the camera
+		transform.position.z = currentDistance;
+		transform.position.x = 0;
+		transform.position.y = height;
+	}
+	else
+	{
+		// Set the side of the camera
+		transform.position.x = currentSide;
+		
+		// Set the height of the camera
+		transform.position.y = currentHeight;
+		
+		// Set the distance of the camera
+		transform.position.z = currentDistance;
+		
+		// Always look at the target
+		transform.LookAt (target);
 
-	// Always look at the target
-	transform.LookAt (target);
+	}
 }
