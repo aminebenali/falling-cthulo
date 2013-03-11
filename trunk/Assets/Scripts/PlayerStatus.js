@@ -1,7 +1,7 @@
 //Playerstatus 31/1/2013
 //How to use: Put this code into the Player Game Object
 //What it does: Manage the distance, life and velocity of the Player
-//Last Modified: 31/1/2013
+//Last Modified: 27/2/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -30,7 +30,6 @@ function Update ()
     if (life < 0)
     {
     	SendMessage ("OnDeath");
-    	gameObject.Find("Game Manager").SendMessage("OnDeath");
     }
     	
     if (life > 100)
@@ -44,7 +43,6 @@ function Update ()
 
 function OnDeath ()
 {
-	print ("Player Status Death");
 	life = 100;
 }
 
