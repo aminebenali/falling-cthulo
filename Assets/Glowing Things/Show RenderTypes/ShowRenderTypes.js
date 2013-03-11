@@ -28,7 +28,7 @@ function OnDisable() {
 }
 
 function OnGUI() {
-	GUILayout.BeginArea (Rect(5,5,300,140), null, GUI.skin.button);
+	GUILayout.BeginArea (Rect(5,5,300,140), GUI.skin.button);
 	GUILayout.Label ("Renders everything with different colors based on shader's RenderType");
 	GUILayout.Label ("Not that useful by itself; just shows how to replace shaders with different RenderTypes");
 	GUILayout.Label ("Most of complexity in replacement shaders is to support terrain. If you don't need terrain, the replacement shaders can be much simpler.");

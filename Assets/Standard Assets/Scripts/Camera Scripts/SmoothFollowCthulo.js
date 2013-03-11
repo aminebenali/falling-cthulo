@@ -1,13 +1,13 @@
 //SmoothFollowCthulo 30/01/2013
 //How to use: Put this code into the Main Camera.
 //What it does: Follows the target Player
-//Last Modified: 12/2/2013
+//Last Modified: 1/3/2013
 //by Yves J. Albuquerque
 
 #pragma strict
 
 var target : Transform;// The target we are following
-var playerCharacterController : CharacterController;//Player Character Controller
+private var playerCharacterController : CharacterController;//Player Character Controller
 var distance = 10.0; // The distance in the x-z plane to the target
 var height = 5.0; // the height we want the camera to be above the target
 
@@ -29,6 +29,9 @@ function Awake ()
 
 function LateUpdate ()
 {
+	if (!target)
+		target = GameObject.FindGameObjectWithTag("Player").transform;
+		
 	var wantedSide = target.position.x;
 	var wantedHeight = target.position.y + height;
 	var wantedDistance = target.position.z - distance;
@@ -77,6 +80,5 @@ function LateUpdate ()
 		
 		// Always look at the target
 		transform.LookAt (target);
-
 	}
 }
