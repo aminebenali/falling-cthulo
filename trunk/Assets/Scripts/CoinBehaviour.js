@@ -11,7 +11,7 @@ var pickupEffect : GameObject;
 
 function OnTriggerEnter (other : Collider)
 {
-	PlayerStatus.coin ++;
+	PlayerStatus.coins ++;
 	Instantiate (pickupEffect, transform.position, Quaternion.identity);
 	audio.PlayOneShot(pickupSound);
 	yield WaitForSeconds(0.1);
