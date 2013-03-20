@@ -11,7 +11,7 @@ function OnTriggerEnter (other : Collider)
 {
 	Instantiate (pickupEffect, transform.position, Quaternion.identity);
 	audio.PlayOneShot(pickupSound);
-	yield WaitForSeconds(0.1);
+	yield WaitForSeconds(0.2);
     //renderer.enabled = false;
     enabled = false;
 }

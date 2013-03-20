@@ -1,37 +1,46 @@
+//PlayerMovement 9/3/2013
+//How to use: Put this code into your player prefab
+//What it does: Character Follow Mouse
+//Last Modified:15/3/2013
+//by Yves J. Albuquerque
+
 #pragma strict
 
-var plane : GameObject;
 var maxDistanceToMove : float = 3;
 var speed = 4.0;
 
 private var controller : CharacterController; //Character Controller Reference
- 
+private var myCamera : Camera; //main Camera reference
+
+private var myTransform : Transform; //Caching component lookup - Optimization Issue
+
+@script AddComponentMenu("Characters/Cthulo Movement On Menu")
+
 
 function Start ()
 {
+	myTransform = transform;
+	myCamera = Camera.mainCamera;
 	controller = GetComponent(CharacterController);
-	transform.position = Vector3 (Random.Range (-30,30),Random.Range (0,30),Random.Range (-20,50));
 }
  
-function Update ()
+function FixedUpdate ()
 {
-    var playerPlane = new Plane(Vector3.up, transform.position);
-    var ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+	if (!LevelManager.menuMode)
+		return;
+    var ray = myCamera.ScreenPointToRay (Input.mousePosition);
 	var hit : RaycastHit;
 	var targetPoint : Vector3;
 	var targetRotation : Quaternion;
-	print ("tá influenciando erroneamente");
 	if (Physics.Raycast (ray, hit, 100))
 	{
-	    Debug.DrawLine (ray.origin, hit.point);
-	    if (Vector3.Distance (hit.point, transform.position) >  maxDistanceToMove) 
+	    if (Vector3.Distance (hit.point, myTransform.position) >  maxDistanceToMove) 
 	    {
 	    	targetPoint = ray.GetPoint(8);
-	    	print ("hitpoint:" + hit.point);
-	    	print ("targetPoint:" + targetPoint);
-	    	targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+	    	targetRotation = Quaternion.LookRotation(targetPoint - myTransform.position);
 	    }
-	   	transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
-	    controller.Move(transform.forward * speed * Time.deltaTime);
+
+	   	myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, speed * Time.deltaTime);
+	    controller.Move(myTransform.forward * speed * Time.deltaTime);
 	}
 }
