@@ -1,7 +1,7 @@
 //Playerstatus 31/1/2013
 //How to use: Put this code into the Player Game Object
 //What it does: Manage the distance, life, velocity and related behaviours of the Player
-//Last Modified: 20/3/2013
+//Last Modified: 21/3/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -10,7 +10,7 @@ public static var life : float = 100; //Life of the player
 public static var velocity : float = 0; //Current Velocity
 public static var coins : int = 0; //Total coins taked
 public static var isDead : boolean = false; //is dead?
-
+public var invunerable : boolean;// invunerabily on/off
 public var deadReplacement : Transform;//dead gameobject
 @HideInInspector
 public var deadBody : Transform;//deadbody transform
@@ -18,7 +18,6 @@ public var deadBody : Transform;//deadbody transform
 private var turbilhaoDeVelocidade : ParticleSystem; //velocity feedback
 private var miasma : Light; //Life feedback
 private var controller : CharacterController;//Character Controller Reference
-private var invunerable : boolean;// invunerabily on/off
 private var myTransform : Transform;//Caching component lookup - Optimization Issue
 
 
@@ -35,6 +34,7 @@ function Awake ()
 function Start ()
 {
 	Reset ();
+	invunerable = true;
  //carregar elementos salvos
 }
 
@@ -66,25 +66,27 @@ function OnDeath ()
  
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {
-	if (controller.collisionFlags & CollisionFlags.Sides)
+	if (!invunerable)
 	{
-		if (myTransform.position.z < hit.transform.position.z)
+		if (controller.collisionFlags & CollisionFlags.Sides)
 		{
-			life -= (3*velocity);
+			if (myTransform.position.z < hit.transform.position.z)
+			{
+					life -= (3*velocity);
+			}
+		}
+		else
+		{
+			life -= velocity;
+		}
+		
+		if (life < 0)
+		{
+			if (hit.transform.tag == "Obstacle")
+				iTween.MoveTo (hit.gameObject, {"y" : 20, "delay" : 2, "time":3});
+		 	BroadcastMessage ("OnDeath");
 		}
 	}
-	else
-	{
-		life -= velocity;
-	}
-	
-	if (life < 0)
-	{
-	 	BroadcastMessage ("OnDeath");
-	}
-	
-	if (hit.transform.tag != "Terrain" || hit.transform.tag != "Mountain")
-		iTween.MoveTo (hit.gameObject, {"y" : 20, "delay" : 2, "time":3});
 }
 
 

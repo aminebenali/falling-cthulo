@@ -1,24 +1,30 @@
 //Level Manager 31/1/2013
 //How to use: Put this code into a Game Manager Object
 //What it does: Level and Game Manager
-//Last Modified: 19/3/2013
+//Last Modified: 21/3/2013
 //by Yves J. Albuquerque
 
 #pragma strict
 
-class Sequences
+class LandMarks
 {
 	var gameObject : GameObject;
-	var distanceToThisSequence : int;
-	var coinsToThisSequence : int;
+	var distanceToThisLandMark : int;
+	var coinsToThisLandMark : int;
 	var done : boolean;
+}
+
+class Obstacle
+{
+	var gameObject : GameObject;
+	var minimalDistanceToNextObstacle : float;
 }
 
 class Level
 {
 	var lvlName : String;
-	var sequences : Sequences[];
-	var obstacleParts : GameObject[]; //Put here all Obstacles
+	var landMark : LandMarks[];
+	var obstacleParts : Obstacle[]; //Put here all Obstacles
 	var groundParts : GameObject[]; //Put here all ground islands. The pivot must be at the top of the Object
 	var mountainParts : GameObject[]; //Put the mountains here. The pivot must be at the bottom
 	var detailParts : GameObject[]; //Put here all Rocks, Walls and other Detail
@@ -27,6 +33,7 @@ class Level
 
 static var actualLevelIndex : int = 0; //Current Level
 static var menuMode : boolean = false; // Menu Mode On/Off
+static var startedGame : boolean = false;//true is the game has already started
 var debugMode : boolean = false; // Debug Mode ignores Menu screen
 
 var menu : GameObject;
@@ -37,14 +44,14 @@ var minDistanceBetweenDetail : float = 1;// Min Distance between Details
 var maxDistanceBetweenObstacles : float = 50; //Max Distance between Obstacles
 var minDistanceBetweenObstacles : float = 1;// Min Distance between Obstacles
 
-var levels : Level[]; //Put here all cenario sequences
+var levels : Level[]; //Put here all cenario landMark
 
 private var nextGround : float = -1;
 private var nextMountain : float = -1;
 private var nextDetail : float = -1;
 private var nextObstacle : float = 200;
 
-private var cthuloCamera : Camera; //Main Camera Reference
+private var myCamera : Camera; //Main Camera Reference
 private var player : Transform; //Player Transform reference
 private var actualLevel : Level;// Current Level
 private var depth : float = 200; //Default cenario sequence depth
@@ -57,6 +64,8 @@ private var playerStatus : PlayerStatus;//PlayerStatus script Reference
 private var smoothFollowCthulo : SmoothFollowCthulo;//PlayerMovement script Reference
 private var lvlNameDisplay : GUIText;//LvlName Reference
 private var cthuloAlive : SkinnedMeshRenderer;//SkennedMeshRenderer Reference
+private var lastObstacle : Obstacle;
+
 
 
 
@@ -64,7 +73,7 @@ private var cthuloAlive : SkinnedMeshRenderer;//SkennedMeshRenderer Reference
 function Awake ()
 {
 	menuMode = !debugMode;
-	cthuloCamera = Camera.mainCamera;
+	myCamera = Camera.mainCamera;
 	player = GameObject.FindGameObjectWithTag("Player").transform;
 	lvlNameDisplay = GameObject.FindObjectOfType(GUIText);
 
@@ -74,13 +83,14 @@ function Awake ()
 	playerMovementOnMenu = player.GetComponent(PlayerMovementOnMenu);
 	cthuloAlive = GameObject.FindObjectOfType(SkinnedMeshRenderer);
 
-	vignet = cthuloCamera.GetComponent(Vignetting);
-	smoothFollowCthulo = cthuloCamera.GetComponent(SmoothFollowCthulo);
+	vignet = myCamera.GetComponent(Vignetting);
+	smoothFollowCthulo = myCamera.GetComponent(SmoothFollowCthulo);
 	
 	if (menuMode)
 	{
- 		Instantiate (menu, cthuloCamera.transform.position + Vector3(0,0,5), Quaternion.identity);
+ 		Instantiate (menu, myCamera.transform.position + Vector3(0,0,7), Quaternion.identity);
 		smoothFollowCthulo.enabled = false;
+		playerMovement.enabled = false;
 		playerMovementOnMenu.enabled = true;
 		player.position = Vector3 (Random.Range(-20,20), Random.Range(-5,20), Random.Range(-15,15));
 	}
@@ -95,6 +105,7 @@ function Awake ()
 function Start ()
 {
 	actualLevel = levels[actualLevelIndex];
+	lvlNameDisplay.material.color.a = 0;
 	Reset ();
 }
 
@@ -102,19 +113,21 @@ function Update ()
 {
 	if (menuMode)
 	{
+		playerStatus.invunerable = true;
 		smoothFollowCthulo.enabled = false;
 		playerMovementOnMenu.enabled = true;
 		return;
-	}
-	else
-	{
-		smoothFollowCthulo.enabled = true;
-		playerMovementOnMenu.enabled = false;
 	}
 
 	if (actualLevel.distanceToNextLevel < player.position.z)
 	{
 		actualLevelIndex ++;
+		if (actualLevelIndex > levels.Length)
+		{
+			actualLevelIndex = 0;
+			for (var i:int = 0; i < levels.Length; i++)
+				levels[i].distanceToNextLevel += player.position.z;
+		}
 		actualLevel = levels[actualLevelIndex];
 		DisplayLevelName ();
 	}
@@ -140,14 +153,16 @@ function Update ()
 	if (player.position.z > nextObstacle)
 	{
 		NewObstacle ();
-		nextObstacle += Random.Range(minDistanceBetweenObstacles, maxDistanceBetweenObstacles);;
+		nextObstacle += Random.Range(lastObstacle.minimalDistanceToNextObstacle, maxDistanceBetweenObstacles);;
 	}
 }
 
 function Reset ()
 {
-	Instantiate (actualLevel.groundParts[Random.Range(0,actualLevel.groundParts.Length)],Vector3(0,-5,player.position.z + 125),Quaternion.identity);
-	Instantiate (actualLevel.mountainParts[Random.Range(0,actualLevel.mountainParts.Length)],Vector3(0, -5 ,player.position.z),Quaternion.identity);
+	Instantiate (actualLevel.groundParts[Random.Range(0,actualLevel.groundParts.Length)],Vector3(0,-5,125),Quaternion.identity);
+	Instantiate (actualLevel.mountainParts[Random.Range(0,actualLevel.mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity);
+	Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3 (Random.Range(-10,10),-5, Random.Range(0,200)),Quaternion.identity);
+	Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3 (Random.Range(-10,10),-5, Random.Range(0,200)),Quaternion.identity);
 	Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3 (Random.Range(-10,10),-5, Random.Range(0,200)),Quaternion.identity);
 }
 
@@ -178,7 +193,6 @@ function NewDetail ()
 
 function NewObstacle ()
 {
-	var obstacle : GameObject;
 	var hit : RaycastHit;
 	var obstaclePosition : Vector3;
 	
@@ -188,7 +202,8 @@ function NewObstacle ()
     	if (hit.collider.CompareTag("Terrain"))
     	{
 	        obstaclePosition = hit.point;
-			obstacle = Instantiate (actualLevel.obstacleParts[Random.Range(0,actualLevel.obstacleParts.Length)],obstaclePosition,Quaternion.identity);
+			lastObstacle = actualLevel.obstacleParts[Random.Range(0,actualLevel.obstacleParts.Length)];
+			Instantiate (lastObstacle.gameObject,obstaclePosition,Quaternion.identity);
 		}
 	}
 }
@@ -201,18 +216,20 @@ function DisplayLevelName ()
 
 }
 
- function OnGUI ()
- {
+function OnGUI ()
+{
+	var windowRect : Rect;
  	if (!playerStatus.isDead)
  		return;
- 	GUILayout.BeginArea(Rect (Screen.width/2, Screen.height/2, Screen.width/3,Screen.height/3));
+ 	windowRect = Rect (Screen.width/4, Screen.height/4, Screen.width/2, Screen.height/2);
+
+ 	GUILayout.BeginArea(windowRect);
  	GUILayout.Label("Total Distance: " + player.position.z);
  	GUILayout.Label("Total Coins: " + playerStatus.coins);
 
  	if (GUILayout.Button("Continue"))
  	{
- 		cthuloAlive.active = true;
- 		playerStatus.Reset();
+		OnAlive();
     }
     
     if (GUILayout.Button("Return to Menu"))
@@ -220,13 +237,50 @@ function DisplayLevelName ()
  		cthuloAlive.active = true;
  	 	menuMode = true;
  		SendMessageUpwards("Reset");
- 		Instantiate (menu, cthuloCamera.transform.position + Vector3(0,0,5), Quaternion.identity);
-
+ 		Instantiate (menu, myCamera.transform.position + Vector3(0,0,5), Quaternion.identity);
     }
  	GUILayout.EndArea();
- }
+}
+
+function WannaPlay ()
+{
+	var wantedPlayerPosition : Vector3;
+	var wantedCameraPosition : Vector3;
+	wantedPlayerPosition = player.position;
+	wantedPlayerPosition.x = 0;
+	wantedPlayerPosition.y = 0;
+	if (startedGame == false)
+	{
+		wantedPlayerPosition.z = 0;
+		startedGame = true;
+	}
+	
+	wantedCameraPosition = Vector3(wantedPlayerPosition.x,wantedPlayerPosition.y + smoothFollowCthulo.height,wantedPlayerPosition.z - smoothFollowCthulo.distance);
+
+		
+	playerMovementOnMenu.enabled = false;
+	iTween.MoveTo(player.gameObject, {"position":wantedPlayerPosition, "time":3f, "easetype":"easeOutQuint"});
+	iTween.RotateTo(player.gameObject, {"rotation":Vector3.forward, "time":3f,"easetype":"easeOutQuint"});
+	iTween.MoveTo(myCamera.gameObject, {"position":wantedCameraPosition, "time":3f,"easetype":"easeInOutCubic", "oncomplete":"TurnOffMenu", "oncompletetarget":gameObject});
+	iTween.LookTo(myCamera.gameObject, {"looktarget": myCamera.transform.position - (wantedCameraPosition - (wantedPlayerPosition + smoothFollowCthulo.target.localPosition)),"time":3f,"easetype":"easeInOutCubic"});
+	yield WaitForSeconds (3);
+	DisplayLevelName ();
+	playerMovement.enabled = true;
+	playerStatus.invunerable = false;
+	smoothFollowCthulo.enabled = true;
+}
  
- function OnDeath ()
+function OnDeath ()
 {
 	cthuloAlive.active = false;
+	smoothFollowCthulo.enabled = false;
+	iTween.MoveTo(myCamera.gameObject, {"x":0,"y":0,"time":3f,"easetype":"easeInOutCubic"});
+	iTween.LookTo(myCamera.gameObject, {"looktarget":Vector3(0,0,myCamera.transform.position.z) + ( 100*(Vector3.forward)),"time":3f,"easetype":"easeInOutCubic", "delay" : 3});
+}
+
+function OnAlive ()
+{
+ 		cthuloAlive.active = true;
+		smoothFollowCthulo.enabled = true;
+ 		playerStatus.Reset();
 }

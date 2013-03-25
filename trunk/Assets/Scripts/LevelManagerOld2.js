@@ -15,7 +15,7 @@
 	var detailParts : GameObject[]; //Put here all Rocks, Walls and other Detail
 	var coinsToNextLevel : int[]; //Put here all cenario sequences
 }*/
-
+/*
 static var actualLevelIndex : int = 0; //Current Level
 static var menuMode : boolean = false; // Menu Mode On/Off
 var debugMode : boolean = false; // Debug Mode ignores Menu screen
@@ -218,4 +218,4 @@ function NewObstacle ()
 function OnDeath ()
 {
 	Reset();
-}
+}*/
