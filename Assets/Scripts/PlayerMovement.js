@@ -90,7 +90,8 @@ function Update()
 
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {
-	
+	if (LevelManager.menuMode)
+		return;
 	if (controller.collisionFlags & CollisionFlags.Sides)
 	{
 		if (myTransform.position.z < hit.transform.position.z)
@@ -149,5 +150,6 @@ function OnDeath ()
 {
 	zSpeed = 1;
 }
+
 
 @script RequireComponent(CharacterController)
