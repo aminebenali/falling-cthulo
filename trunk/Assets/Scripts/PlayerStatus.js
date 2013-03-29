@@ -58,9 +58,18 @@ function OnDeath ()
 {
 	if (!isDead)
 	{
+		var startingVelocity : Vector3 = controller.velocity;
+
+		isDead = true;
 		deadBody = Instantiate(deadReplacement, transform.position, transform.rotation);
 		CopyTransformsRecurse(transform, deadBody);
-		isDead = true;
+		var deadRigidBody : Rigidbody = deadBody.GetComponentInChildren(Rigidbody);
+		deadRigidBody.velocity = controller.velocity;
+		
+		for (var body:Rigidbody in deadBody.GetComponentsInChildren(Rigidbody))
+		{
+			 body.velocity = startingVelocity;
+		}
 	}
 }
  
