@@ -6,7 +6,7 @@
 
 #pragma strict
 
-enum ButtonFunction {Start, Credits, Exit}; //Button Types
+enum ButtonFunction {Start, Credits, Exit, ChangeLvl}; //Button Types
 var buttonType : ButtonFunction; //Button Type
 
 var creditsBubbles : GameObject[];//Array with bubles from credits
@@ -51,6 +51,9 @@ function OnMouseUpAsButton ()
 	
 	if (buttonType == ButtonFunction.Exit)
 		Application.Quit();
+		
+	if (buttonType == ButtonFunction.ChangeLvl)
+		levelManager.Restart();
 }
 
 function TurnOffMenu ()
