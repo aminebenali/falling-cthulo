@@ -1,7 +1,7 @@
 //Level Manager 31/1/2013
 //How to use: Put this code into a Game Manager Object
 //What it does: Level and Game Manager
-//Last Modified: 21/3/2013
+//Last Modified: 02/4/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -17,11 +17,18 @@ class Obstacle
 {
 	var gameObject : GameObject;
 	var minimalDistanceToNextObstacle : float;
+	var minX : float;
+	var maxX : float;
 }
 
 class Level
 {
 	var lvlName : String;
+	var skyBox : Color;
+	var fogColor : Color;
+	var ambientColor : Color;
+	var directionalLightColor : Color;
+	var directionalColorIntensity : float;
 	var landMark : LandMarks[];
 	var obstacleParts : Obstacle[]; //Put here all Obstacles
 	var groundParts : GameObject[]; //Put here all ground islands. The pivot must be at the top of the Object
@@ -33,16 +40,17 @@ class Level
 static var actualLevelIndex : int = 0; //Current Level
 static var menuMode : boolean = false; // Menu Mode On/Off
 static var startedGame : boolean = false;//true is the game has already started
-var debugMode : boolean = false; // Debug Mode ignores Menu screen
 
-var menu : GameObject;
-var distanceBetweenGround : float = 200; //Distance between ground parts
-var distanceBetweenMountain : float = 50; //Distance between Mountain parts
+var menu : GameObject; //Menu Elements
+
 var maxDistanceBetweenDetail : float = 200; //Max Distance between Details
 var minDistanceBetweenDetail : float = 1;// Min Distance between Details
 var maxDistanceBetweenObstacles : float = 50; //Max Distance between Obstacles
+private var distanceBetweenGround : float = 250; //Distance between ground parts
+private var distanceBetweenMountain : float = 50; //Distance between Mountain parts
 
 var levels : Level[]; //Put here all cenario landMark
+var itens : GameObject[];
 
 private var cachedObstacles : Array;
 private var cachedDetails : Array;
@@ -52,29 +60,40 @@ private var cachedMountains : Array;
 private var nextGround : float = -1;
 private var nextMountain : float = -1;
 private var nextDetail : float = -1;
-private var nextObstacle : float = 200;
+private var nextObstacle : float = -1;
+private var nextItem : float = -1;
 
-private var myCamera : Camera; //Main Camera Reference
+
+private var isChangingLevel : boolean = true;
+private var renderSettingsBlender : float = 0;
+
+
 private var player : Transform; //Player Transform reference
-private var actualLevel : Level;// Current Level
-private var depth : float = 200; //Default cenario sequence depth
-private var depthMultiplyer : float = 0; // Works like an index to depth control
-
-private var vignet : Vignetting; //Vignet Reference
 private var playerMovement : PlayerMovement;//PlayerMovement script Reference
 private var playerMovementOnMenu : PlayerMovementOnMenu;//PlayerMovementOnMenu script Reference
 private var playerStatus : PlayerStatus;//PlayerStatus script Reference
-private var smoothFollowCthulo : SmoothFollowCthulo;//PlayerMovement script Reference
-private var lvlNameDisplay : GUIText;//LvlName Reference
 private var cthuloAlive : SkinnedMeshRenderer;//SkennedMeshRenderer Reference
+private var myCamera : Camera; //Main Camera Reference
+private var smoothFollowCthulo : SmoothFollowCthulo;//PlayerMovement script Reference
+private var vignet : Vignetting; //Vignet Reference
+private var myDirectionalLight : Light;
+private var lvlNameDisplay : GUIText;//LvlName Reference
 private var lastObstacle : Obstacle;
 
 
 function Awake ()
 {
-	menuMode = !debugMode;
-	myCamera = Camera.mainCamera;
 	player = GameObject.FindGameObjectWithTag("Player").transform;
+	playerMovement = player.GetComponent(PlayerMovement);
+	playerMovementOnMenu = player.GetComponent(PlayerMovementOnMenu);
+	playerStatus = player.GetComponent(PlayerStatus);
+	
+	cthuloAlive = GameObject.FindObjectOfType(SkinnedMeshRenderer);
+	myCamera = Camera.mainCamera;
+	smoothFollowCthulo = myCamera.GetComponent(SmoothFollowCthulo);
+	vignet = myCamera.GetComponent(Vignetting);
+
+	myDirectionalLight = GameObject.FindObjectOfType(Light);
 	lvlNameDisplay = GameObject.FindObjectOfType(GUIText);
 	
 	cachedObstacles = new Array ();
@@ -82,27 +101,29 @@ function Awake ()
 	cachedGrounds = new Array ();
 	cachedMountains = new Array ();
 	
-	playerMovement = player.GetComponent(PlayerMovement);
-	playerStatus = player.GetComponent(PlayerStatus);
-	playerMovementOnMenu = player.GetComponent(PlayerMovementOnMenu);
-	cthuloAlive = GameObject.FindObjectOfType(SkinnedMeshRenderer);
-
-	vignet = myCamera.GetComponent(Vignetting);
-	smoothFollowCthulo = myCamera.GetComponent(SmoothFollowCthulo);
+	lvlNameDisplay.material.color.a = 0; //Bug Correction: When the project is reopened, the default value is getting back to 1;
 }
 
 function Start ()
 {
-	CheckDebugMode ();
-	
-	actualLevel = levels[actualLevelIndex];
-	lvlNameDisplay.material.color.a = 0;
-	
-	Reset ();
+	CreateMenu ();	
+	Restart ();
 }
 
 function Update ()
 {
+	if (isChangingLevel)
+	{
+		renderSettingsBlender += Time.deltaTime/3;
+		RenderSettings.fogColor = Color.Lerp (RenderSettings.fogColor, levels[actualLevelIndex].fogColor,renderSettingsBlender);
+		RenderSettings.ambientLight = Color.Lerp (RenderSettings.ambientLight, levels[actualLevelIndex].ambientColor,renderSettingsBlender);
+		RenderSettings.skybox.SetColor("_Tint", Color.Lerp (RenderSettings.skybox.GetColor("_Tint"), levels[actualLevelIndex].skyBox,renderSettingsBlender));
+		iTween.ColorUpdate(myDirectionalLight.gameObject, levels[actualLevelIndex].directionalLightColor, 3f);
+		iTween.FloatUpdate(myDirectionalLight.intensity, levels[actualLevelIndex].directionalColorIntensity, 3f);
+		if (renderSettingsBlender > 1)
+			isChangingLevel = false;
+	}
+
 	if (menuMode)
 	{
 		playerStatus.invunerable = true;
@@ -111,7 +132,7 @@ function Update ()
 		return;
 	}
 
-	if (actualLevel.distanceToNextLevel < player.position.z)
+	if (levels[actualLevelIndex].distanceToNextLevel < player.position.z)
 	{
 		LevelUp();
 	}
@@ -139,35 +160,30 @@ function Update ()
 		NewObstacle ();
 		nextObstacle += Random.Range(lastObstacle.minimalDistanceToNextObstacle, maxDistanceBetweenObstacles);;
 	}
-}
-
-function Reset ()
-{
-	cachedObstacles.Push (Instantiate (actualLevel.obstacleParts[Random.Range(0,actualLevel.obstacleParts.Length)].gameObject,Vector3(0,-5,Random.Range(50,200)),Quaternion.identity));
-	cachedGrounds.Push (Instantiate (actualLevel.groundParts[Random.Range(0,actualLevel.groundParts.Length)],Vector3(0,-5,125),Quaternion.identity));
-	cachedMountains.Push (Instantiate (actualLevel.mountainParts[Random.Range(0,actualLevel.mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity));
-	cachedDetails.Push (Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3 (Random.Range(-10,10),-5, Random.Range(0,200)),Quaternion.identity));
-	cachedDetails.Push (Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3 (Random.Range(-10,10),-5, Random.Range(0,200)),Quaternion.identity));
-	cachedDetails.Push (Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3 (Random.Range(-10,10),-5, Random.Range(0,200)),Quaternion.identity));
+	
+	if (player.position.z > nextItem)
+	{
+		NewItem ();
+		nextItem += Random.Range(50, 2000);;
+	}
 }
 
 function NewGround ()
 {
 	//cachedGrounds.Shift();
-	cachedGrounds.Push (Instantiate (actualLevel.groundParts[Random.Range(0,actualLevel.groundParts.Length)],Vector3(0,-5,nextGround + 125),Quaternion.identity));
-	Instantiate (actualLevel.groundParts[Random.Range(0,actualLevel.groundParts.Length)],Vector3(0,-5,nextGround + 125),Quaternion.identity);
-
+	cachedGrounds.Push (Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,nextGround),Quaternion.identity));
+	//Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,nextGround + 125),Quaternion.identity);
 }
 
 function NewMountain ()
 {
-	Instantiate (actualLevel.mountainParts[Random.Range(0,actualLevel.mountainParts.Length)],Vector3(0, -5 ,nextMountain),Quaternion.identity);
+	Instantiate (levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,nextMountain),Quaternion.identity);
 }
 
 function NewDetail ()
 {
 	var detail : GameObject;
-	detail = Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],Vector3(Random.Range(-15,15), -5, player.position.z + 197),Quaternion.identity);
+	detail = Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3(Random.Range(-15,15), -5, player.position.z + 197),Quaternion.identity);
 	detail.transform.localEulerAngles.y += Random.Range(0,360);
 	/*var hit : RaycastHit;
 	var detailPosition : Vector3;
@@ -176,7 +192,7 @@ function NewDetail ()
     if (Physics.Raycast (Vector3(Random.Range(-15,15), 50, player.position.z + 197), -Vector3.up, hit))
     {
         detailPosition = hit.point;
-		detail = Instantiate (actualLevel.detailParts[Random.Range(0,actualLevel.detailParts.Length)],detailPosition,Quaternion.identity);
+		detail = Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],detailPosition,Quaternion.identity);
 		detail.transform.localEulerAngles.y += Random.Range(0,360);
 	}*/
 }
@@ -184,30 +200,20 @@ function NewDetail ()
 function NewObstacle ()
 {
 	var obstaclePosition : Vector3;
-	lastObstacle = actualLevel.obstacleParts[Random.Range(0,actualLevel.obstacleParts.Length)];
-	Instantiate (lastObstacle.gameObject,Vector3(Random.Range(-15,15), -5, player.position.z + 200),Quaternion.identity);
-/*
-	var hit : RaycastHit;
-	var obstaclePosition : Vector3;
-	
+	lastObstacle = levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)];
+	Instantiate (lastObstacle.gameObject,Vector3(Random.Range(lastObstacle.minX,lastObstacle.maxX), -5, player.position.z + 200),Quaternion.identity);
+}
 
-    if (Physics.Raycast (Vector3(Random.Range(-15,15), 50, player.position.z + 200), -Vector3.up, hit))
-    {
-    	if (hit.collider.CompareTag("Terrain"))
-    	{
-	        obstaclePosition = hit.point;
-			lastObstacle = actualLevel.obstacleParts[Random.Range(0,actualLevel.obstacleParts.Length)];
-			Instantiate (lastObstacle.gameObject,obstaclePosition,Quaternion.identity);
-		}
-	}*/
+function NewItem ()
+{
+	Instantiate (itens[Random.Range(0,itens.Length)],Vector3(Random.Range(-15,15),Random.Range(-5,20),player.position.z + 200),Quaternion.identity);
 }
 
 function DisplayLevelName ()
 {
-	lvlNameDisplay.text = actualLevel.lvlName;
+	lvlNameDisplay.text = levels[actualLevelIndex].lvlName;
 	iTween.ColorTo(lvlNameDisplay.gameObject, {"a": 1, "time" : 2f});
 	iTween.ColorTo(lvlNameDisplay.gameObject, {"a": 0, "time" : 2f, "delay" : 3f});
-
 }
 
 function OnGUI ()
@@ -266,21 +272,13 @@ function WannaPlay ()
 }
  
 
-function CheckDebugMode ()
+function CreateMenu ()
 {
-	if (menuMode)
-	{
- 		Instantiate (menu, myCamera.transform.position + Vector3(0,0,7), Quaternion.identity);
-		smoothFollowCthulo.enabled = false;
-		playerMovement.enabled = false;
-		playerMovementOnMenu.enabled = true;
-		player.position = Vector3 (Random.Range(-20,20), Random.Range(-5,20), Random.Range(-15,15));
-	}
-	else
-	{
-		smoothFollowCthulo.enabled = true;
-		playerMovementOnMenu.enabled = false;
-	}
+	Instantiate (menu, Vector3(0,0,0), Quaternion.identity);
+	smoothFollowCthulo.enabled = false;
+	playerMovement.enabled = false;
+	playerMovementOnMenu.enabled = true;
+	player.position = Vector3 (Random.Range(-20,20), Random.Range(-5,20), Random.Range(-15,15));
 }
 
 function OnDeath ()
@@ -300,10 +298,18 @@ function OnAlive ()
 	playerStatus.Reset();
 }
 
+function Reset ()
+{
+	cachedObstacles.Push (Instantiate (levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].gameObject,Vector3(0,-5,Random.Range(50,200)),Quaternion.identity));
+	cachedGrounds.Push (Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,0),Quaternion.identity));
+	cachedMountains.Push (Instantiate (levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity));
+	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(0,200)),Quaternion.identity));
+	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(0,200)),Quaternion.identity));
+	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(0,200)),Quaternion.identity));
+}
 
 function Restart ()
 {
-	actualLevelIndex ++;
 	ClearScene ();
 	Reset ();
 }
@@ -324,14 +330,29 @@ function DestroyArrayElements (array : Array)
 
 function LevelUp ()
 {
-		actualLevelIndex ++;
-		if (actualLevelIndex > levels.Length)
-		{
-			actualLevelIndex = 0;
-			IncreaseDistancesToNextLevel ();
-		}
-		actualLevel = levels[actualLevelIndex];
-		DisplayLevelName ();
+	actualLevelIndex ++;
+
+	if (actualLevelIndex == levels.Length)
+	{
+		actualLevelIndex = 0;
+		IncreaseDistancesToNextLevel ();
+	}
+
+	DisplayLevelName ();
+
+	isChangingLevel = true;
+}
+
+function ChangeSkybox ()
+{
+	var skyMaterial : Material;
+	skyMaterial = RenderSettings.skybox;
+
+//    lerpSkyBox += Time.deltaTime/6;
+    
+  //  skyMaterial.SetFloat("_Blend", lerpSkyBox);
+	//if (lerpSkyBox > 1)
+      	//changeSkyBox = false;
 }
 
 function IncreaseDistancesToNextLevel ()
