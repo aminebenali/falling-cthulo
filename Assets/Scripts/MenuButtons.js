@@ -1,7 +1,7 @@
 //SmoothFollowCthulo 08/03/2013
 //How to use: Put this code menu buttons
 //What it does: Menu button actions
-//Last Modified: 19/03/2013
+//Last Modified: 02/04/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -35,25 +35,26 @@ function OnMouseExit ()
 
 function OnMouseUpAsButton ()
 {
-	if (buttonType == ButtonFunction.Start)
+	switch (buttonType)
 	{
-		levelManager.WannaPlay();
-		LevelManager.menuMode = false;
-	}
-		
-	if (buttonType == ButtonFunction.Credits)
-	{
-		for (var i=0 ; i < creditsBubbles.Length; i++)
-		{
-			Instantiate (creditsBubbles[i],Vector3 (Random.Range(-5,5), -8, transform.position.z -1),Quaternion.LookRotation(Vector3.up));
-		}
-	}
-	
-	if (buttonType == ButtonFunction.Exit)
-		Application.Quit();
-		
-	if (buttonType == ButtonFunction.ChangeLvl)
-		levelManager.Restart();
+		case ButtonFunction.Start:
+			levelManager.WannaPlay();
+			LevelManager.menuMode = false;
+			break;
+		case ButtonFunction.Credits:
+			for (var i=0 ; i < creditsBubbles.Length; i++)
+			{
+				Instantiate (creditsBubbles[i],Vector3 (Random.Range(-5,5), -8, transform.position.z -1),Quaternion.LookRotation(Vector3.up));
+			}
+			break;
+		case ButtonFunction.Exit:
+			Application.Quit();
+		break;
+		case ButtonFunction.ChangeLvl:
+			levelManager.LevelUp();
+			levelManager.Restart();
+		break;
+	} 
 }
 
 function TurnOffMenu ()
