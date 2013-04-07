@@ -1,18 +1,19 @@
 //SmoothFollowCthulo 08/03/2013
 //How to use: Put this code menu buttons
 //What it does: Menu button actions
-//Last Modified: 02/04/2013
+//Last Modified: 04/04/2013
 //by Yves J. Albuquerque
 
 #pragma strict
 
-enum ButtonFunction {Start, Credits, Exit, ChangeLvl}; //Button Types
+enum ButtonFunction {Start, Credits, Exit, ChangeLvl, FittingRoom}; //Button Types
 var buttonType : ButtonFunction; //Button Type
 
 var creditsBubbles : GameObject[];//Array with bubles from credits
 
 private var myRenderer : Renderer;//Caching component lookup - Optimization Issue
 private var levelManager : LevelManager;
+private var playerMovementOnMenu : PlayerMovementOnMenu;
 
 @script AddComponentMenu("GUI/Button")
 
@@ -20,6 +21,17 @@ function Start ()
 {
 	myRenderer = renderer;
 	levelManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent(LevelManager);
+	playerMovementOnMenu = GameObject.FindGameObjectWithTag("Player").GetComponent(PlayerMovementOnMenu);
+}
+
+function OnMouseEnter ()
+{
+    switch (buttonType)
+	{
+		default:
+			playerMovementOnMenu.inFittingRoom = false;
+		break;
+	} 
 }
 
 function OnMouseOver ()
@@ -54,8 +66,14 @@ function OnMouseUpAsButton ()
 			levelManager.LevelUp();
 			levelManager.Restart();
 		break;
+		case ButtonFunction.FittingRoom:
+			playerMovementOnMenu.inFittingRoom = true;
+		break;
+		default:
+		break;
 	} 
 }
+
 
 function TurnOffMenu ()
 {

@@ -38,7 +38,7 @@ class Level
 }
 
 static var actualLevelIndex : int = 0; //Current Level
-static var menuMode : boolean = false; // Menu Mode On/Off
+static var menuMode : boolean = true; // Menu Mode On/Off
 static var startedGame : boolean = false;//true is the game has already started
 
 var menu : GameObject; //Menu Elements
@@ -48,6 +48,7 @@ var minDistanceBetweenDetail : float = 1;// Min Distance between Details
 var maxDistanceBetweenObstacles : float = 50; //Max Distance between Obstacles
 private var distanceBetweenGround : float = 250; //Distance between ground parts
 private var distanceBetweenMountain : float = 50; //Distance between Mountain parts
+var maxDistanceBetweenItem : float = 50; //Max Distance between Obstacles
 
 var levels : Level[]; //Put here all cenario landMark
 var itens : GameObject[];
@@ -128,7 +129,7 @@ function Update ()
 	{
 		playerStatus.invunerable = true;
 		smoothFollowCthulo.enabled = false;
-		playerMovementOnMenu.enabled = true;
+		//playerMovementOnMenu.enabled = true;
 		return;
 	}
 
@@ -164,7 +165,7 @@ function Update ()
 	if (player.position.z > nextItem)
 	{
 		NewItem ();
-		nextItem += Random.Range(50, 2000);;
+		nextItem += Random.Range(50, maxDistanceBetweenItem);;
 	}
 }
 
@@ -206,7 +207,7 @@ function NewObstacle ()
 
 function NewItem ()
 {
-	Instantiate (itens[Random.Range(0,itens.Length)],Vector3(Random.Range(-15,15),Random.Range(-5,20),player.position.z + 200),Quaternion.identity);
+	Instantiate (itens[Random.Range(0,itens.Length)],Vector3(Random.Range(-15,15),Random.Range(-5,15),player.position.z + 200),Quaternion.identity);
 }
 
 function DisplayLevelName ()
