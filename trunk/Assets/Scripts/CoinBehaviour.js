@@ -10,12 +10,50 @@ static var timeFromLastCoin : float;
 static var coinMultiplyier : int = 1;
 
 var pickupSound : AudioClip;
+var pickupMegaCoinSound : AudioClip;
 var pickupEffect : GameObject;
+var isMegaCoin : boolean = false;
+private var newMegaCoin : boolean = false;
+private var timeToPitchBack : float = 0.3;
+
+function Start ()
+{
+	if (isMegaCoin)
+	{
+		transform.localScale *= 2;
+	}
+}
+
+function Update ()
+{
+	if (!isMegaCoin)
+	{
+		if (!newMegaCoin)
+		{
+			if (pitch > 2.8)
+			{
+				newMegaCoin = true;
+				transform.localScale *= 2;
+				timeToPitchBack = 3;
+			}
+		}
+		else
+			if (pitch < 2.8)
+			{
+				newMegaCoin = false;
+				transform.localScale /= 2;
+				timeToPitchBack = 0.3;
+			}
+	}
+}
 
 function OnTriggerEnter (other : Collider)
 {
+	if (!other.CompareTag("Player"))
+		return;
 	var actualTime : float = Time.time;
-	if (actualTime - timeFromLastCoin < 0.3)
+	
+	if (actualTime - timeFromLastCoin < timeToPitchBack)
 	{
 		pitch += 0.3;
 		coinMultiplyier ++;
@@ -25,12 +63,21 @@ function OnTriggerEnter (other : Collider)
 		coinMultiplyier = 1;
 		pitch = 1;
 	}
+	
 
-	PlayerStatus.coins += coinMultiplyier;
+	
 	Instantiate (pickupEffect, transform.position, Quaternion.identity);
 	audio.pitch = pitch;
 	audio.PlayOneShot(pickupSound);
+	if (newMegaCoin || isMegaCoin)
+	{
+		coinMultiplyier = 10;
+		audio.PlayOneShot(pickupMegaCoinSound);
+	}
+	
+	PlayerStatus.coins += coinMultiplyier;
 	yield WaitForSeconds(0.1);
+
     renderer.enabled = false;
     enabled = false;
     
