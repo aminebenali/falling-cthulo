@@ -9,9 +9,12 @@ var pickupEffect : GameObject;
 
 function OnTriggerEnter (other : Collider)
 {
-	Instantiate (pickupEffect, transform.position, Quaternion.identity);
-	audio.PlayOneShot(pickupSound);
-	yield WaitForSeconds(0.1);
-    //renderer.enabled = false;
-    enabled = false;
+	if (other.CompareTag("Player"))
+	{
+		Instantiate (pickupEffect, transform.position, Quaternion.identity);
+		audio.PlayOneShot(pickupSound);
+		yield WaitForSeconds(0.1);
+	    //renderer.enabled = false;
+	    //enabled = false;
+	}
 }

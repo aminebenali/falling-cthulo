@@ -47,7 +47,7 @@ var maxDistanceBetweenDetail : float = 200; //Max Distance between Details
 var minDistanceBetweenDetail : float = 1;// Min Distance between Details
 var maxDistanceBetweenObstacles : float = 50; //Max Distance between Obstacles
 private var distanceBetweenGround : float = 250; //Distance between ground parts
-private var distanceBetweenMountain : float = 50; //Distance between Mountain parts
+private var distanceBetweenMountain : float = 250; //Distance between Mountain parts
 var maxDistanceBetweenItem : float = 50; //Max Distance between Obstacles
 
 var levels : Level[]; //Put here all cenario landMark
