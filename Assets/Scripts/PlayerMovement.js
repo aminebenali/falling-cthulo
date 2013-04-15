@@ -1,7 +1,7 @@
 //PlayerMovement 30/1/2013
 //How to use: Put this code into your player prefab
 //What it does: Move the character to the sides when acelerates and apply gravity. Also constraits the character.
-//Last Modified:20/3/2013
+//Last Modified:15/4/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -48,8 +48,8 @@ function Update()
 	var yAcc : float;
 	
 	xAcc = Input.acceleration.x;
-	yAcc = Input.acceleration.y;
-
+	yAcc = Input.acceleration.z;
+	
     //Velocity Adjustment
     if (zSpeed < 25)
 		zSpeed += (2*Time.deltaTime);
@@ -81,12 +81,28 @@ function Update()
     {
     	moveDirection.y = 0;
     }
+    if (myTransform.position.x < -21 && moveDirection.x < 0)
+    {
+    	moveDirection.x = 0;
+    }
+    
+    if (myTransform.position.x > 21 && moveDirection.x > 0)
+    {
+    	moveDirection.x = 0;
+    }
     // Move the controller
     controller.Move(moveDirection * Time.deltaTime);
     
     anim.SetFloat("Speed", moveDirection.magnitude);
 }
 
+function OnGUI ()
+{
+	GUILayout.Label("x" + Input.acceleration.x.ToString());
+	GUILayout.Label("y" + Input.acceleration.y.ToString());
+	GUILayout.Label("z" + Input.acceleration.z.ToString());
+
+}
 
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {

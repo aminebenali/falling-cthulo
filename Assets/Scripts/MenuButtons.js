@@ -41,7 +41,7 @@ function OnMouseOver ()
 
 function OnMouseExit ()
 {
-    myRenderer.material.color = Color.white;
+   myRenderer.material.color = Color.white;
 }
 
 
