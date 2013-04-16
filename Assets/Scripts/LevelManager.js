@@ -144,29 +144,32 @@ function Update ()
 		NewGround ();
 	}
 	
-	if (player.position.z > nextMountain)
+	else if (player.position.z > nextMountain)
 	{
 		nextMountain += distanceBetweenMountain;
 		NewMountain ();
 	}
 	
-	if (player.position.z > nextDetail)
+	else if (player.position.z > nextObstacle)
+	{
+		NewObstacle ();
+		nextObstacle += Random.Range(lastObstacle.minimalDistanceToNextObstacle, maxDistanceBetweenObstacles);
+		nextDetail += lastObstacle.minimalDistanceToNextObstacle;
+	}
+	
+	else if (player.position.z > nextDetail)
 	{
 		NewDetail ();
 		nextDetail += Random.Range(minDistanceBetweenDetail, maxDistanceBetweenDetail);;
 	}
 	
-	if (player.position.z > nextObstacle)
-	{
-		NewObstacle ();
-		nextObstacle += Random.Range(lastObstacle.minimalDistanceToNextObstacle, maxDistanceBetweenObstacles);;
-	}
-	
-	if (player.position.z > nextItem)
+	else if (player.position.z > nextItem)
 	{
 		NewItem ();
 		nextItem += Random.Range(50, maxDistanceBetweenItem);;
 	}
+	
+
 }
 
 function NewGround ()
@@ -184,7 +187,7 @@ function NewMountain ()
 function NewDetail ()
 {
 	var detail : GameObject;
-	detail = Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3(Random.Range(-15,15), -5, player.position.z + 197),Quaternion.identity);
+	detail = Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3(Random.Range(-20,20), -5, player.position.z + 197),Quaternion.identity);
 	detail.transform.localEulerAngles.y += Random.Range(0,360);
 	/*var hit : RaycastHit;
 	var detailPosition : Vector3;
