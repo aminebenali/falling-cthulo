@@ -60,8 +60,8 @@ private var cachedMountains : Array;
 
 private var nextGround : float = -1;
 private var nextMountain : float = -1;
-private var nextDetail : float = -1;
-private var nextObstacle : float = -1;
+private var nextDetail : float = 100;
+private var nextObstacle : float = 100;
 private var nextItem : float = -1;
 
 
@@ -80,6 +80,8 @@ private var vignet : Vignetting; //Vignet Reference
 private var myDirectionalLight : Light;
 private var lvlNameDisplay : GUIText;//LvlName Reference
 private var lastObstacle : Obstacle;
+
+private var groundIndex : int = 0;
 
 
 function Awake ()
@@ -141,7 +143,19 @@ function Update ()
 	if (player.position.z > nextGround)
 	{
 		nextGround += distanceBetweenGround;
-		NewGround ();
+		
+		if (cachedGrounds.length > 3)
+		{
+			var oldestGround : GameObject;
+			groundIndex++;
+			if (groundIndex > 3)
+				groundIndex=0;
+			
+			oldestGround = cachedGrounds[groundIndex];
+			oldestGround.transform.position.z = nextGround;
+		}
+		else
+			NewGround ();
 	}
 	
 	else if (player.position.z > nextMountain)
@@ -168,8 +182,6 @@ function Update ()
 		NewItem ();
 		nextItem += Random.Range(50, maxDistanceBetweenItem);;
 	}
-	
-
 }
 
 function NewGround ()
@@ -304,12 +316,12 @@ function OnAlive ()
 
 function Reset ()
 {
-	cachedObstacles.Push (Instantiate (levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].gameObject,Vector3(0,-5,Random.Range(50,200)),Quaternion.identity));
+	cachedObstacles.Push (Instantiate (levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].gameObject,Vector3(0,-5,Random.Range(50,150)),Quaternion.identity));
 	cachedGrounds.Push (Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,0),Quaternion.identity));
 	cachedMountains.Push (Instantiate (levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity));
-	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(0,200)),Quaternion.identity));
-	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(0,200)),Quaternion.identity));
-	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(0,200)),Quaternion.identity));
+	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(5,100)),Quaternion.identity));
+	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(5,100)),Quaternion.identity));
+	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(5,100)),Quaternion.identity));
 }
 
 function Restart ()
