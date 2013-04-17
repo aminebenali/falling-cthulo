@@ -98,6 +98,7 @@ function Update()
 
 function OnGUI ()
 {
+	GUILayout.Label("\n");
 	GUILayout.Label("x" + Input.acceleration.x.ToString());
 	GUILayout.Label("y" + Input.acceleration.y.ToString());
 	GUILayout.Label("z" + Input.acceleration.z.ToString());
