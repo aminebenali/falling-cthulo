@@ -1,0 +1,122 @@
+fileFormatVersion: 2
+guid: f728c71cfd5d342d09df341b9ddefa54
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: AirCraft04_BackRotor
+    100004: AirCraft04_BODY
+    100006: AirCraft04_Body
+    100008: AirCraft04_Rotor
+    100010: GunLeft
+    100012: GunRight
+    100014: Platform
+    100016: Platform.2
+    100018: Rocket
+    100020: Rocket.1
+    100022: Rocket.1.2
+    100024: Rocket.2
+    100026: Rocket.2.2
+    100028: Rocket.2.3
+    400000: //RootNode
+    400002: AirCraft04_BackRotor
+    400004: AirCraft04_BODY
+    400006: AirCraft04_Body
+    400008: AirCraft04_Rotor
+    400010: GunLeft
+    400012: GunRight
+    400014: Platform
+    400016: Platform.2
+    400018: Rocket
+    400020: Rocket.1
+    400022: Rocket.1.2
+    400024: Rocket.2
+    400026: Rocket.2.2
+    400028: Rocket.2.3
+    2300000: AirCraft04_BackRotor
+    2300002: AirCraft04_Body
+    2300004: AirCraft04_Rotor
+    2300006: Platform
+    2300008: Platform.2
+    2300010: Rocket
+    2300012: Rocket.1
+    2300014: Rocket.1.2
+    2300016: Rocket.2
+    2300018: Rocket.2.2
+    2300020: Rocket.2.3
+    3300000: AirCraft04_BackRotor
+    3300002: AirCraft04_Body
+    3300004: AirCraft04_Rotor
+    3300006: Platform
+    3300008: Platform.2
+    3300010: Rocket
+    3300012: Rocket.1
+    3300014: Rocket.1.2
+    3300016: Rocket.2
+    3300018: Rocket.2.2
+    3300020: Rocket.2.3
+    4300000: AirCraft04_Rotor
+    4300002: AirCraft04_BackRotor
+    4300004: AirCraft04_Body
+    4300006: Rocket.2
+    4300008: Rocket.1
+    4300010: Rocket
+    4300012: Platform
+    4300014: Rocket.2.2
+    4300016: Rocket.1.2
+    4300018: Rocket.2.3
+    4300020: Platform.2
+    7400000: C4D Animation Take
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 3
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 
