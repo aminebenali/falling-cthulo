@@ -1,0 +1,135 @@
+fileFormatVersion: 2
+guid: 528bdc5701c6edf4cbfe96a026d90e51
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: head
+    100004: hip
+    100006: L_elbow
+    100008: L_foot
+    100010: L_hand
+    100012: L_knee
+    100014: L_pelvis
+    100016: L_shoulder
+    100018: L_tentacle1
+    100020: L_tentacle2
+    100022: L_tentacle3
+    100024: L_tentacle4
+    100026: L_wing1
+    100028: L_wing2
+    100030: L_wing3
+    100032: L_wing4
+    100034: M_tentacle1
+    100036: M_tentacle2
+    100038: M_tentacle3
+    100040: neck
+    100042: polySurface1
+    100044: R_elbow
+    100046: R_foot
+    100048: R_hand
+    100050: R_knee
+    100052: R_pelvis
+    100054: R_shoulder
+    100056: R_tentacle1
+    100058: R_tentacle2
+    100060: R_tentacle3
+    100062: R_tentacle4
+    100064: R_wing1
+    100066: R_wing2
+    100068: R_wing3
+    100070: R_wing4
+    100072: tummy
+    400000: //RootNode
+    400002: head
+    400004: hip
+    400006: L_elbow
+    400008: L_foot
+    400010: L_hand
+    400012: L_knee
+    400014: L_pelvis
+    400016: L_shoulder
+    400018: L_tentacle1
+    400020: L_tentacle2
+    400022: L_tentacle3
+    400024: L_tentacle4
+    400026: L_wing1
+    400028: L_wing2
+    400030: L_wing3
+    400032: L_wing4
+    400034: M_tentacle1
+    400036: M_tentacle2
+    400038: M_tentacle3
+    400040: neck
+    400042: polySurface1
+    400044: R_elbow
+    400046: R_foot
+    400048: R_hand
+    400050: R_knee
+    400052: R_pelvis
+    400054: R_shoulder
+    400056: R_tentacle1
+    400058: R_tentacle2
+    400060: R_tentacle3
+    400062: R_tentacle4
+    400064: R_wing1
+    400066: R_wing2
+    400068: R_wing3
+    400070: R_wing4
+    400072: tummy
+    4300000: polySurface1
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: polySurface1
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
