@@ -53,6 +53,8 @@ var maxDistanceBetweenItem : float = 50; //Max Distance between Obstacles
 var levels : Level[]; //Put here all cenario landMark
 var itens : GameObject[];
 
+//private var poolDetail : PoolingSystem;
+
 private var cachedObstacles : Array;
 private var cachedDetails : Array;
 private var cachedGrounds : Array;
