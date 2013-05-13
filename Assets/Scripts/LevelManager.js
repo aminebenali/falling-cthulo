@@ -1,75 +1,66 @@
 //Level Manager 31/1/2013
 //How to use: Put this code into a Game Manager Object
 //What it does: Level and Game Manager
-//Last Modified: 02/4/2013
+//Last Modified: 13/5/2013
 //by Yves J. Albuquerque
 
 #pragma strict
 
-class LandMarks
+class LandMarks//LandMark Class
 {
-	var gameObject : GameObject;
-	var distanceToThisLandMark : int;
-	var done : boolean;
+	var landMark : Transform;//landMark transform
+	var distanceToThisLandMark : int;//distance to this landmark should be half of total distance from level
+	var done : boolean;//if you pass through a landmark it becomes true
 }
 
-class Obstacle
+class Obstacle//Obstacles Class
 {
-	var gameObject : GameObject;
-	var minimalDistanceToNextObstacle : float;
-	var minX : float;
-	var maxX : float;
+	var obstacle : Transform;//obstacle transform
+	var minimalDistanceToNextObstacle : float;//minimal distance to next obstacle so no detail or obstacle is created over an obstacle
+	var minX : float;//minimal value in X axis to spawn this Obstacle
+	var maxX : float;//maximum value in X axis to spawn this Obstacle
 }
 
-class Level
+class Level//Level class to manage our level.
 {
-	var lvlName : String;
-	var skyBox : Color;
-	var fogColor : Color;
-	var ambientColor : Color;
-	var directionalLightColor : Color;
-	var directionalColorIntensity : float;
-	var landMark : LandMarks[];
+	var lvlName : String;//Name of this level
+	var skyBox : Color;//skyBox from this level
+	var fogColor : Color;//fog Color of this level
+	var ambientColor : Color;//ambiente color of this level
+	var directionalLightColor : Color;//directional light color of this level
+	var directionalColorIntensity : float;//directional light color intensity
+	var landMark : LandMarks;//landMark of this Level
 	var obstacleParts : Obstacle[]; //Put here all Obstacles
-	var groundParts : GameObject[]; //Put here all ground islands. The pivot must be at the top of the Object
-	var mountainParts : GameObject[]; //Put the mountains here. The pivot must be at the bottom
-	var detailParts : GameObject[]; //Put here all Rocks, Walls and other Detail
-	var distanceToNextLevel : int; //Put here how many coins you need to preceed to next level
+	var groundParts : Transform[]; //Put here all ground islands. The pivot must be at the top of the Object
+	var mountainParts : Transform[]; //Put the mountains here. The pivot must be at the bottom
+	var detailParts : Transform[]; //Put here all Rocks, Walls and other Detail
+	var distanceToNextLevel : int; //Put here how long you need to swing before go to the next level
 }
 
 static var actualLevelIndex : int = 0; //Current Level
-static var menuMode : boolean = true; // Menu Mode On/Off
 static var startedGame : boolean = false;//true is the game has already started
+static var menuMode : boolean = true; // Menu Mode On/Off
 
 var menu : GameObject; //Menu Elements
 
-var maxDistanceBetweenDetail : float = 200; //Max Distance between Details
+var maxDistanceBetweenDetail : float = 100; //Max Distance between Details
 var minDistanceBetweenDetail : float = 1;// Min Distance between Details
 var maxDistanceBetweenObstacles : float = 50; //Max Distance between Obstacles
+var maxDistanceBetweenItem : float = 50; //Max Distance between Itens
+
+var levels : Level[]; //Here comes all you levels
+var itens : Transform[];//Put here all your itens
+
 private var distanceBetweenGround : float = 250; //Distance between ground parts
 private var distanceBetweenMountain : float = 250; //Distance between Mountain parts
-var maxDistanceBetweenItem : float = 50; //Max Distance between Obstacles
+private var nextGround : float = -1;//tracker to next ground
+private var nextMountain : float = -1;//tracker to next Mountain
+private var nextDetail : float = 100;//tracker to next Detail
+private var nextObstacle : float = 100;//tracker to next Obstacle
+private var nextItem : float = -1;//tracker to next item
 
-var levels : Level[]; //Put here all cenario landMark
-var itens : GameObject[];
-
-//private var poolDetail : PoolingSystem;
-
-private var cachedObstacles : Array;
-private var cachedDetails : Array;
-private var cachedGrounds : Array;
-private var cachedMountains : Array;
-
-private var nextGround : float = -1;
-private var nextMountain : float = -1;
-private var nextDetail : float = 100;
-private var nextObstacle : float = 100;
-private var nextItem : float = -1;
-
-
-private var isChangingLevel : boolean = true;
-private var renderSettingsBlender : float = 0;
-
+private var isChangingLevel : boolean = true;//is true while damping level settings
+private var renderSettingsBlender : float = 0;//damping timer while changing level
 
 private var player : Transform; //Player Transform reference
 private var playerMovement : PlayerMovement;//PlayerMovement script Reference
@@ -79,12 +70,9 @@ private var cthuloAlive : SkinnedMeshRenderer;//SkennedMeshRenderer Reference
 private var myCamera : Camera; //Main Camera Reference
 private var smoothFollowCthulo : SmoothFollowCthulo;//PlayerMovement script Reference
 private var vignet : Vignetting; //Vignet Reference
-private var myDirectionalLight : Light;
+private var myDirectionalLight : Light;//My directional Light reference
 private var lvlNameDisplay : GUIText;//LvlName Reference
-private var lastObstacle : Obstacle;
-
-private var groundIndex : int = 0;
-
+private var lastObstacle : Obstacle;//Last instatiated Obstacle.
 
 function Awake ()
 {
@@ -101,17 +89,12 @@ function Awake ()
 	myDirectionalLight = GameObject.FindObjectOfType(Light);
 	lvlNameDisplay = GameObject.FindObjectOfType(GUIText);
 	
-	cachedObstacles = new Array ();
-	cachedDetails = new Array ();
-	cachedGrounds = new Array ();
-	cachedMountains = new Array ();
-	
 	lvlNameDisplay.material.color.a = 0; //Bug Correction: When the project is reopened, the default value is getting back to 1;
 }
 
 function Start ()
 {
-	CreateMenu ();	
+	CreateMenu ();
 	Restart ();
 }
 
@@ -130,12 +113,7 @@ function Update ()
 	}
 
 	if (menuMode)
-	{
-		playerStatus.invunerable = true;
-		smoothFollowCthulo.enabled = false;
-		//playerMovementOnMenu.enabled = true;
 		return;
-	}
 
 	if (levels[actualLevelIndex].distanceToNextLevel < player.position.z)
 	{
@@ -145,19 +123,7 @@ function Update ()
 	if (player.position.z > nextGround)
 	{
 		nextGround += distanceBetweenGround;
-		
-		if (cachedGrounds.length > 3)
-		{
-			var oldestGround : GameObject;
-			groundIndex++;
-			if (groundIndex > 3)
-				groundIndex=0;
-			
-			oldestGround = cachedGrounds[groundIndex];
-			oldestGround.transform.position.z = nextGround;
-		}
-		else
-			NewGround ();
+		NewGround ();
 	}
 	
 	else if (player.position.z > nextMountain)
@@ -165,7 +131,6 @@ function Update ()
 		nextMountain += distanceBetweenMountain;
 		NewMountain ();
 	}
-	
 	else if (player.position.z > nextObstacle)
 	{
 		NewObstacle ();
@@ -188,20 +153,18 @@ function Update ()
 
 function NewGround ()
 {
-	//cachedGrounds.Shift();
-	cachedGrounds.Push (Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,nextGround),Quaternion.identity));
-	//Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,nextGround + 125),Quaternion.identity);
+	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,nextGround),Quaternion.identity);
 }
 
 function NewMountain ()
 {
-	Instantiate (levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,nextMountain),Quaternion.identity);
+	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,nextMountain),Quaternion.identity);
 }
 
 function NewDetail ()
 {
-	var detail : GameObject;
-	detail = Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3(Random.Range(-20,20), -5, player.position.z + 197),Quaternion.identity);
+	var detail : Transform;
+	detail = PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, player.position.z + 197),Quaternion.identity);
 	detail.transform.localEulerAngles.y += Random.Range(0,360);
 	/*var hit : RaycastHit;
 	var detailPosition : Vector3;
@@ -219,7 +182,8 @@ function NewObstacle ()
 {
 	var obstaclePosition : Vector3;
 	lastObstacle = levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)];
-	Instantiate (lastObstacle.gameObject,Vector3(Random.Range(lastObstacle.minX,lastObstacle.maxX), -5, player.position.z + 200),Quaternion.identity);
+	PoolManager.Pools["Obstacles"].Spawn(lastObstacle.obstacle,Vector3(Random.Range(lastObstacle.minX,lastObstacle.maxX), -5, player.position.z + 200),Quaternion.identity);
+//	Instantiate (lastObstacle.gameObject,Vector3(Random.Range(lastObstacle.minX,lastObstacle.maxX), -5, player.position.z + 200),Quaternion.identity);
 }
 
 function NewItem ()
@@ -296,6 +260,7 @@ function CreateMenu ()
 	smoothFollowCthulo.enabled = false;
 	playerMovement.enabled = false;
 	playerMovementOnMenu.enabled = true;
+	playerStatus.invunerable = true;
 	player.position = Vector3 (Random.Range(-20,20), Random.Range(-5,20), Random.Range(-15,15));
 }
 
@@ -318,12 +283,12 @@ function OnAlive ()
 
 function Reset ()
 {
-	cachedObstacles.Push (Instantiate (levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].gameObject,Vector3(0,-5,Random.Range(50,150)),Quaternion.identity));
-	cachedGrounds.Push (Instantiate (levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,0),Quaternion.identity));
-	cachedMountains.Push (Instantiate (levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity));
-	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(5,100)),Quaternion.identity));
-	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(5,100)),Quaternion.identity));
-	cachedDetails.Push (Instantiate (levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)],Vector3 (Random.Range(-15,15),-5, Random.Range(5,100)),Quaternion.identity));
+	PoolManager.Pools["Obstacles"].Spawn(levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].obstacle,Vector3(0,-5,Random.Range(50,150)),Quaternion.identity);
+	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,0),Quaternion.identity);
+	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(5,100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(5,100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(5,100)),Quaternion.identity);
 }
 
 function Restart ()
@@ -334,20 +299,30 @@ function Restart ()
 
 function ClearScene ()
 {
-	DestroyArrayElements (cachedObstacles);
-	DestroyArrayElements (cachedDetails);
-	DestroyArrayElements (cachedMountains);
-	DestroyArrayElements (cachedGrounds);
-}
-
-function DestroyArrayElements (array : Array)
-{
-	for (var i : int = 0 ; i<array.length ; i++)
-		Destroy (array[i]);
+	var i : int;
+	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	{
+		PoolManager.Pools["Obstacles"].Despawn(PoolManager.Pools["Obstacles"][i]);
+	}
+	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	{
+		PoolManager.Pools["Grounds"].Despawn(PoolManager.Pools["Obstacles"][i]);
+	}
+	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	{
+		PoolManager.Pools["Mountains"].Despawn(PoolManager.Pools["Obstacles"][i]);
+	}
+	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	{
+		PoolManager.Pools["Details"].Despawn(PoolManager.Pools["Obstacles"][i]);
+	}
 }
 
 function LevelUp ()
 {
+	if (isChangingLevel)
+		return;
+		
 	actualLevelIndex ++;
 
 	if (actualLevelIndex == levels.Length)
@@ -357,6 +332,7 @@ function LevelUp ()
 	}
 
 	DisplayLevelName ();
+	
 
 	isChangingLevel = true;
 }

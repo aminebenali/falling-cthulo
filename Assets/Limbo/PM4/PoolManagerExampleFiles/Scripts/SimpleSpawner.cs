@@ -106,5 +106,4 @@ public class SimpleSpawner : MonoBehaviour
 
         yield return null;
     }
-
 }
