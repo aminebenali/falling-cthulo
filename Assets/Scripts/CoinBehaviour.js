@@ -76,7 +76,7 @@ function OnTriggerEnter (other : Collider)
 	}
 	
 	PlayerStatus.coins += coinMultiplyier;
-	yield WaitForSeconds(0.1);
+	//yield WaitForSeconds(0.1);
 
     renderer.enabled = false;
     enabled = false;

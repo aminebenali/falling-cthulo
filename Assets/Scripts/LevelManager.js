@@ -188,7 +188,7 @@ function NewObstacle ()
 
 function NewItem ()
 {
-	Instantiate (itens[Random.Range(0,itens.Length)],Vector3(Random.Range(-15,15),Random.Range(-5,15),player.position.z + 200),Quaternion.identity);
+	PoolManager.Pools["Itens"].Spawn(itens[Random.Range(0,itens.Length)],Vector3(Random.Range(-15,15),Random.Range(-5,15),player.position.z + 200),Quaternion.identity);
 }
 
 function DisplayLevelName ()
@@ -286,9 +286,9 @@ function Reset ()
 	PoolManager.Pools["Obstacles"].Spawn(levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].obstacle,Vector3(0,-5,Random.Range(50,150)),Quaternion.identity);
 	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,0),Quaternion.identity);
 	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity);
-	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(5,100)),Quaternion.identity);
-	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(5,100)),Quaternion.identity);
-	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(5,100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(10,100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(10,100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(10,100)),Quaternion.identity);
 }
 
 function Restart ()

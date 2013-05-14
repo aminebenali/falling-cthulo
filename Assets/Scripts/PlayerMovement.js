@@ -125,7 +125,7 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
         print("Only touching sides");
         
     if (controller.collisionFlags == CollisionFlags.Above)
-        print("Touching ground!");
+        //print("Touching ground!");
 
     if (controller.collisionFlags == CollisionFlags.Below)
         print("Something above");
