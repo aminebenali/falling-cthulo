@@ -10,6 +10,18 @@
 
 function OnTriggerEnter (other : Collider)
 {
-	if (other.tag != "Player")
-	    Destroy(other.transform.root.gameObject);
+	if (other.tag == "Player")
+		return;
+		
+	else if (other.tag == "Obstacle")
+		PoolManager.Pools["Obstacles"].Despawn(other.transform);
+		
+	else if (other.tag == "Details")
+		PoolManager.Pools["Details"].Despawn(other.transform);
+		
+	else if (other.tag == "Item")
+		PoolManager.Pools["Itens"].Despawn(other.transform);
+		
+	else
+	    Destroy(other.transform.gameObject);
 }

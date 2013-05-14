@@ -92,13 +92,21 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 		if (life < 0)
 		{
 			if (hit.transform.tag == "Obstacle")
-				iTween.MoveTo (hit.gameObject, {"y" : 20, "delay" : 2, "time":3});
+			{
+				//var originalYPosition : float;
+				//originalYPosition = transform.position.y;
+				//iTween.MoveTo (hit.gameObject, {"y" : 50, "delay" : 1, "time":5});
+				//if (PoolManager.Pools["Obstacles"].GetPrefab(hit.transform))
+					
+			}
 		 	BroadcastMessage ("OnDeath");
 		}
 	}
 }
 
-
+function RecursiveLookInPool ()
+{
+}
 function CopyTransformsRecurse (src : Transform,  dst : Transform)
 {
 	dst.position = src.position;
