@@ -5,7 +5,7 @@
 //by Yves J. Albuquerque
 
 #pragma strict
-var speedRotation : float = 1;// base rotation velocity
+var speedRotation : float = 45;// base rotation velocity
 var randomImprovement : boolean = true; //Add some velocity to this object (0~2)
 
 private var myTransform : Transform; //Caching component lookup - Optimization Issue
@@ -22,5 +22,5 @@ function Start ()
 
 function Update ()
 {
-	myTransform.localEulerAngles.y += speedRotation;
+	myTransform.localEulerAngles.y += speedRotation * Time.deltaTime;
 }
