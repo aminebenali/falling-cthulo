@@ -165,6 +165,12 @@ function ApplyConstraits ()//Not good solution yet. Cthulo still bouncing at bou
 
 function OnDeath ()
 {
+	zSpeed = 0;
+}
+
+function OnAlive ()
+{
+	print ("PlayerMovement OnAlive");
 	zSpeed = 1;
 }
 

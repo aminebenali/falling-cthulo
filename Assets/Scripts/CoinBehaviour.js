@@ -79,7 +79,15 @@ function OnTriggerEnter (other : Collider)
 	//yield WaitForSeconds(0.1);
 
     renderer.enabled = false;
-    enabled = false;
+    //active = false;
     
     timeFromLastCoin = Time.time;
+}
+
+function OnSpawned ()
+{
+	if (!renderer.enabled)
+	{
+   		renderer.enabled = true;
+	}
 }

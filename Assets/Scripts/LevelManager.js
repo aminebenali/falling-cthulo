@@ -209,18 +209,17 @@ function OnGUI ()
  	GUILayout.Label("Total Distance: " + player.position.z);
  	GUILayout.Label("Total Coins: " + playerStatus.coins);
 
- 	if (GUILayout.Button("Continue"))
+ 	if (GUILayout.Button("Try Again"))
  	{
-		OnAlive();
+ 	 	menuMode = false;
+ 		SendMessageUpwards("OnAlive");
     }
     
     if (GUILayout.Button("Return to Menu"))
  	{
- 		playerStatus.Reset();
  		cthuloAlive.active = true;
  	 	menuMode = true;
- 		SendMessageUpwards("Restart");
- 		Instantiate (menu, myCamera.transform.position + Vector3(0,0,5), Quaternion.identity);
+ 		Start ();
     }
  	GUILayout.EndArea();
 }
@@ -277,8 +276,7 @@ function OnAlive ()
 	DisplayLevelName ();
 	IncreaseDistancesToNextLevel();
 	cthuloAlive.active = true;
-	smoothFollowCthulo.enabled = true;
-	playerStatus.Reset();
+	smoothFollowCthulo.enabled = true;	
 }
 
 function Reset ()

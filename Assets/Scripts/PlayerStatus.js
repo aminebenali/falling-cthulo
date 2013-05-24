@@ -10,7 +10,7 @@ public static var life : float = 100; //Life of the player
 public static var velocity : float = 0; //Current Velocity
 public static var coins : int = 0; //Total coins taked
 public static var isDead : boolean = false; //is dead?
-public var invunerable : boolean;// invunerabily on/off
+public static var invunerable : boolean;// invunerabily on/off
 public var deadReplacement : Transform;//dead gameobject
 @HideInInspector
 public var deadBody : Transform;//deadbody transform
@@ -72,10 +72,17 @@ function OnDeath ()
 		}
 	}
 }
+
+function OnAlive ()
+{
+	print ("PlayerStatus OnAlive");
+	Reset ();
+	Invulnerabilize ();
+}
  
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {
-	if (!invunerable)
+	if (!invunerable && !isDead)
 	{
 		if (controller.collisionFlags & CollisionFlags.Sides)
 		{
@@ -91,22 +98,11 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 		
 		if (life < 0)
 		{
-			if (hit.transform.tag == "Obstacle")
-			{
-				//var originalYPosition : float;
-				//originalYPosition = transform.position.y;
-				//iTween.MoveTo (hit.gameObject, {"y" : 50, "delay" : 1, "time":5});
-				//if (PoolManager.Pools["Obstacles"].GetPrefab(hit.transform))
-					
-			}
 		 	BroadcastMessage ("OnDeath");
 		}
 	}
 }
 
-function RecursiveLookInPool ()
-{
-}
 function CopyTransformsRecurse (src : Transform,  dst : Transform)
 {
 	dst.position = src.position;
@@ -125,4 +121,18 @@ function Reset ()
 {
 	life = 100;
 	isDead = false;
+}
+
+function Invulnerabilize ()
+{
+	Invulnerabilize (10);
+}
+
+function Invulnerabilize (timer : float)
+{
+	invunerable = true;
+	controller.collider.enabled = false;
+	yield WaitForSeconds (timer);
+	invunerable = false;
+	controller.collider.enabled = true;
 }
