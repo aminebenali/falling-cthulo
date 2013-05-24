@@ -34,7 +34,9 @@ class Level//Level class to manage our level.
 	var groundParts : Transform[]; //Put here all ground islands. The pivot must be at the top of the Object
 	var mountainParts : Transform[]; //Put the mountains here. The pivot must be at the bottom
 	var detailParts : Transform[]; //Put here all Rocks, Walls and other Detail
-	var distanceToNextLevel : int; //Put here how long you need to swing before go to the next level
+	@HideInInspector
+	var startPoint : int; //Put here how long you need to swimming before go to the next level
+	var endPoint : int; //Put here how long you need to swimming before go to the next level
 }
 
 static var actualLevelIndex : int = 0; //Current Level
@@ -115,7 +117,7 @@ function Update ()
 	if (menuMode)
 		return;
 
-	if (levels[actualLevelIndex].distanceToNextLevel < player.position.z)
+	if (levels[actualLevelIndex].endPoint < player.position.z)
 	{
 		LevelUp();
 	}
@@ -212,6 +214,7 @@ function OnGUI ()
  	if (GUILayout.Button("Try Again"))
  	{
  	 	menuMode = false;
+ 		Restart();
  		SendMessageUpwards("OnAlive");
     }
     
@@ -281,16 +284,25 @@ function OnAlive ()
 
 function Reset ()
 {
-	PoolManager.Pools["Obstacles"].Spawn(levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].obstacle,Vector3(0,-5,Random.Range(50,150)),Quaternion.identity);
-	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,0),Quaternion.identity);
-	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,0),Quaternion.identity);
-	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(10,100)),Quaternion.identity);
-	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(10,100)),Quaternion.identity);
-	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(10,100)),Quaternion.identity);
+	PoolManager.Pools["Obstacles"].Spawn(levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].obstacle,Vector3(0,-5,Random.Range(levels[actualLevelIndex].startPoint + 50,levels[actualLevelIndex].startPoint + 150)),Quaternion.identity);
+	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,levels[actualLevelIndex].startPoint),Quaternion.identity);
+	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,levels[actualLevelIndex].startPoint),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(levels[actualLevelIndex].startPoint + 10,levels[actualLevelIndex].startPoint + 100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(levels[actualLevelIndex].startPoint + 10,levels[actualLevelIndex].startPoint + 100)),Quaternion.identity);
+	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(levels[actualLevelIndex].startPoint + 10,levels[actualLevelIndex].startPoint + 100)),Quaternion.identity);
 }
 
 function Restart ()
 {
+	iTween.Stop (myCamera.gameObject);
+	player.position.z = levels[actualLevelIndex].startPoint;
+	myCamera.transform.position.z = levels[actualLevelIndex].startPoint - 10;
+	nextGround = levels[actualLevelIndex].startPoint;
+	nextMountain = levels[actualLevelIndex].startPoint;
+	nextDetail = levels[actualLevelIndex].startPoint;
+	nextObstacle = levels[actualLevelIndex].startPoint;
+	nextItem = levels[actualLevelIndex].startPoint;
+	
 	ClearScene ();
 	Reset ();
 }
@@ -321,7 +333,11 @@ function LevelUp ()
 	if (isChangingLevel)
 		return;
 		
+	var lastEndPoint : int;	
+	lastEndPoint = levels[actualLevelIndex].endPoint;
+
 	actualLevelIndex ++;
+	
 
 	if (actualLevelIndex == levels.Length)
 	{
@@ -331,6 +347,7 @@ function LevelUp ()
 
 	DisplayLevelName ();
 	
+	levels[actualLevelIndex].startPoint = lastEndPoint;
 
 	isChangingLevel = true;
 }
@@ -350,5 +367,5 @@ function ChangeSkybox ()
 function IncreaseDistancesToNextLevel ()
 {
 	for (var i:int = 0; i < levels.Length; i++)
-			levels[i].distanceToNextLevel += player.position.z;
+			levels[i].endPoint += player.position.z;
 }

@@ -77,7 +77,7 @@ function OnAlive ()
 {
 	print ("PlayerStatus OnAlive");
 	Reset ();
-	Invulnerabilize ();
+	//Invulnerabilize ();
 }
  
 function OnControllerColliderHit (hit : ControllerColliderHit)
