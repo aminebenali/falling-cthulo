@@ -1,7 +1,7 @@
 //Playerstatus 31/1/2013
 //How to use: Put this code into the Player Game Object
 //What it does: Manage the distance, life, velocity and related behaviours of the Player
-//Last Modified: 21/3/2013
+//Last Modified: 24/5/2013
 //by Yves J. Albuquerque
 
 #pragma strict

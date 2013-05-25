@@ -1,7 +1,7 @@
 //Playerstatus 9/2/2013
 //How to use: Put this code into the coin
 //What it does: Disapear and play a SFX
-//Last Modified: 2/4/2013
+//Last Modified: 24/5/2013
 //by Yves J. Albuquerque
 
 #pragma strict
