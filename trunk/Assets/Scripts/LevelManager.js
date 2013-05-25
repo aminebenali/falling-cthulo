@@ -1,7 +1,7 @@
 //Level Manager 31/1/2013
 //How to use: Put this code into a Game Manager Object
 //What it does: Level and Game Manager
-//Last Modified: 13/5/2013
+//Last Modified: 24/5/2013
 //by Yves J. Albuquerque
 
 #pragma strict
