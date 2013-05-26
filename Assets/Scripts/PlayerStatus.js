@@ -1,7 +1,7 @@
 //Playerstatus 31/1/2013
 //How to use: Put this code into the Player Game Object
 //What it does: Manage the distance, life, velocity and related behaviours of the Player
-//Last Modified: 24/5/2013
+//Last Modified: 26/5/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -79,6 +79,15 @@ function OnAlive ()
 	Reset ();
 	//Invulnerabilize ();
 }
+
+function ReceiveDamage (damage : float)
+{
+	life -= damage;
+	if (life < 0)
+	{
+	 	BroadcastMessage ("OnDeath");
+	}
+}
  
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {
@@ -88,17 +97,12 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 		{
 			if (myTransform.position.z < hit.transform.position.z)
 			{
-					life -= (3*velocity);
+				ReceiveDamage(3*velocity);
 			}
 		}
 		else
 		{
-			life -= velocity;
-		}
-		
-		if (life < 0)
-		{
-		 	BroadcastMessage ("OnDeath");
+			ReceiveDamage(velocity);
 		}
 	}
 }

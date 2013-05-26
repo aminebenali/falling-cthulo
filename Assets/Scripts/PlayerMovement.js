@@ -20,6 +20,7 @@ var constrait : boolean = false; //Turn On and Turn Off constrait
 
 private var finalGravity : float;//The final gravity value
 private var moveDirection : Vector3 = Vector3.zero; //Move Direction Vector
+private var impact : Vector3 = Vector3.zero;//modifies moveDirection over a short time
 private var constraitTimer : float = 0;//Timer to Lerp between actual position and the desired position of the bound
 private var isCorrectingPosition : boolean = false;//isCorrectingPosition?
 private var isCorrectingPositionOldValue : boolean = false;//The Old Value from isCorrectingPosition
@@ -63,9 +64,6 @@ function Update()
     cThulo.transform.LookAt (moveDirection + myTransform.position + Vector3.forward);
     moveDirection = myTransform.TransformDirection(moveDirection);
 	
-	// Calculate Gravity
-	//gravity = 1.0-moveDirection.normalized * gravity;
-	
     // Apply gravity
     moveDirection.y -= gravity * Time.deltaTime;
     
@@ -90,10 +88,23 @@ function Update()
     {
     	moveDirection.x = 0;
     }
+    
+    moveDirection += impact;
+    impact = Vector3.Lerp(impact, Vector3.zero, 5*Time.deltaTime);
+    
     // Move the controller
     controller.Move(moveDirection * Time.deltaTime);
     
     anim.SetFloat("Speed", moveDirection.magnitude);
+}
+
+function AddImpact(dir: Vector3, force: float)
+{
+	dir.Normalize();
+ 	if (dir.y < 0)
+ 		dir.y = -dir.y; // reflect down force on the ground
+ 	
+ 	impact += dir.normalized * force;
 }
 
 function OnGUI ()
