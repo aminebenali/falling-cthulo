@@ -283,6 +283,7 @@ function OnAlive ()
 function Reset ()
 {
 	PoolManager.Pools["Obstacles"].Spawn(levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].obstacle,Vector3(0,-5,Random.Range(levels[actualLevelIndex].startPoint + 50,levels[actualLevelIndex].startPoint + 150)),Quaternion.identity);
+	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,levels[actualLevelIndex].startPoint-250),Quaternion.identity);
 	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,levels[actualLevelIndex].startPoint),Quaternion.identity);
 	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,levels[actualLevelIndex].startPoint),Quaternion.identity);
 	PoolManager.Pools["Details"].Spawn(levels[actualLevelIndex].detailParts[Random.Range(0,levels[actualLevelIndex].detailParts.Length)].transform,Vector3(Random.Range(-20,20), -5, Random.Range(levels[actualLevelIndex].startPoint + 10,levels[actualLevelIndex].startPoint + 100)),Quaternion.identity);
@@ -297,7 +298,7 @@ function Restart ()
 	
 	myCamera.transform.position.x = 0;
 	myCamera.transform.position.y = 0;
-	myCamera.transform.position.z = levels[actualLevelIndex].startPoint - 10;
+	myCamera.transform.position.z = levels[actualLevelIndex].startPoint - 20;
 	myCamera.transform.rotation = Quaternion.identity;
 	
 	nextGround = levels[actualLevelIndex].startPoint;
@@ -313,21 +314,30 @@ function Restart ()
 function ClearScene ()
 {
 	var i : int;
+	
 	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
 	{
 		PoolManager.Pools["Obstacles"].Despawn(PoolManager.Pools["Obstacles"][i]);
 	}
-	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	
+	for (i = 0; i < PoolManager.Pools["Grounds"].Count ; i++)
 	{
-		PoolManager.Pools["Grounds"].Despawn(PoolManager.Pools["Obstacles"][i]);
+		PoolManager.Pools["Grounds"].Despawn(PoolManager.Pools["Grounds"][i]);
 	}
-	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	
+	for (i = 0; i < PoolManager.Pools["Mountains"].Count ; i++)
 	{
-		PoolManager.Pools["Mountains"].Despawn(PoolManager.Pools["Obstacles"][i]);
+		PoolManager.Pools["Mountains"].Despawn(PoolManager.Pools["Mountains"][i]);
 	}
-	for (i = 0; i < PoolManager.Pools["Obstacles"].Count ; i++)
+	
+	for (i = 0; i < PoolManager.Pools["Details"].Count ; i++)
 	{
-		PoolManager.Pools["Details"].Despawn(PoolManager.Pools["Obstacles"][i]);
+		PoolManager.Pools["Details"].Despawn(PoolManager.Pools["Details"][i]);
+	}
+	
+	for (i = 0; i < PoolManager.Pools["Landmarks"].Count ; i++)
+	{
+		PoolManager.Pools["Landmarks"].Despawn(PoolManager.Pools["Landmarks"][i]);
 	}
 }
 
