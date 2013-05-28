@@ -95,6 +95,11 @@ function FixedUpdate(){
 
 //For Debug Purpose we will show the angle and rotation values
 function OnGUI(){
+	if (SystemInfo.supportsAccelerometer)
+		GUI.Label(Rect (50,100,Screen.width,50),"supportsAccelerometer",GUI.skin.GetStyle("Debug"));
+	else
+		GUI.Label(Rect (50,100,Screen.width,50),"Not supportsAccelerometer",GUI.skin.GetStyle("Debug"));
+
 	if(isShownDebugLogOnScreen){
 		GUI.skin = isBigScreen?skinBigScreen:skinSmallScreen; //GUI skin is changed for bigger screen!
 		

@@ -336,8 +336,8 @@ function UseTimeBonus(){
 	if(!timeBonusInUse){
 	
 		//ready to use blur!
-		ControllerXCode.currentCameraMotionBlur.blurAmount = 0.0;
-		ControllerXCode.currentCameraMotionBlur.enabled = true;
+//		ControllerXCode.currentCameraMotionBlur.blurAmount = 0.0;
+//		ControllerXCode.currentCameraMotionBlur.enabled = true;
 		
 		
 		//Slow Down Game Music
@@ -382,14 +382,14 @@ function UseTimeBonus(){
 			
 			ControllerXCode.audioSourceHeartBeatGame.volume += hearbeatSlowDownVolume;
 			
-			ControllerXCode.currentCameraMotionBlur.blurAmount += blurSlowDownAmount;
+//			ControllerXCode.currentCameraMotionBlur.blurAmount += blurSlowDownAmount;
 		}
 		
 		ControllerXCode.audioSourceMusicGame.pitch = musicMinPitch;
 		ControllerXCode.audioSourceMusicGame.volume = musicMinVolume;
 		
 		ControllerXCode.audioSourceHeartBeatGame.volume = volumeTimeUse;
-		ControllerXCode.currentCameraMotionBlur.blurAmount = blurAmountTimeUse;
+//		ControllerXCode.currentCameraMotionBlur.blurAmount = blurAmountTimeUse;
 		
 		yield StartCoroutine(WaitTillResumeGame());
 		Debug.Log("2 - TimeScale " + timeScaleValue);
@@ -413,9 +413,9 @@ function UseTimeBonus(){
 	   		if(ControllerXCode.audioSourceHeartBeatGame.volume > 0.0){
 	   			ControllerXCode.audioSourceHeartBeatGame.volume -= hearbeatSpeedUpVolume;
 	   		}
-	   		if(ControllerXCode.currentCameraMotionBlur.blurAmount > 0.0){
-	   			ControllerXCode.currentCameraMotionBlur.blurAmount -= blurSpeedUpAmount;
-	   		}
+//	   		if(ControllerXCode.currentCameraMotionBlur.blurAmount > 0.0){
+//	   			ControllerXCode.currentCameraMotionBlur.blurAmount -= blurSpeedUpAmount;
+//	   		}
 	   		
 		}
 		Time.timeScale = 1.0;
@@ -427,8 +427,8 @@ function UseTimeBonus(){
 			ControllerXCode.audioSourceHeartBeatGame.Stop();
 		}
 		
-		ControllerXCode.currentCameraMotionBlur.blurAmount = 0.0;
-		ControllerXCode.currentCameraMotionBlur.enabled = false;
+//		ControllerXCode.currentCameraMotionBlur.blurAmount = 0.0;
+//		ControllerXCode.currentCameraMotionBlur.enabled = false;
 		
 	}
 	else{	//Time Bonus is in USE

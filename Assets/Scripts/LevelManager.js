@@ -96,8 +96,8 @@ function Awake ()
 
 function Start ()
 {
-	CreateMenu ();
 	Restart ();
+	CreateMenu ();
 }
 
 function Update ()
@@ -185,7 +185,6 @@ function NewObstacle ()
 	var obstaclePosition : Vector3;
 	lastObstacle = levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)];
 	PoolManager.Pools["Obstacles"].Spawn(lastObstacle.obstacle,Vector3(Random.Range(lastObstacle.minX,lastObstacle.maxX), -5, player.position.z + 200),Quaternion.identity);
-//	Instantiate (lastObstacle.gameObject,Vector3(Random.Range(lastObstacle.minX,lastObstacle.maxX), -5, player.position.z + 200),Quaternion.identity);
 }
 
 function NewItem ()
@@ -213,15 +212,14 @@ function OnGUI ()
 
  	if (GUILayout.Button("Try Again"))
  	{
- 	 	menuMode = false;
  		Restart();
  		SendMessageUpwards("OnAlive");
     }
     
     if (GUILayout.Button("Return to Menu"))
  	{
- 		cthuloAlive.active = true;
  	 	menuMode = true;
+ 		SendMessageUpwards("OnAlive");
  		Start ();
     }
  	GUILayout.EndArea();
@@ -258,12 +256,12 @@ function WannaPlay ()
 
 function CreateMenu ()
 {
-	Instantiate (menu, Vector3(0,0,0), Quaternion.identity);
+	PoolManager.Pools["Menu"].Spawn(menu.transform,Vector3(0,0,levels[actualLevelIndex].startPoint), Quaternion.identity);
 	smoothFollowCthulo.enabled = false;
 	playerMovement.enabled = false;
 	playerMovementOnMenu.enabled = true;
 	playerStatus.invunerable = true;
-	player.position = Vector3 (Random.Range(-20,20), Random.Range(-5,20), Random.Range(-15,15));
+	player.position = Vector3 (Random.Range(-20,20), Random.Range(-5,20), Random.Range(levels[actualLevelIndex].startPoint-15,levels[actualLevelIndex].startPoint+15));
 }
 
 function OnDeath ()
@@ -296,7 +294,12 @@ function Restart ()
 {
 	iTween.Stop (myCamera.gameObject);
 	player.position.z = levels[actualLevelIndex].startPoint;
+	
+	myCamera.transform.position.x = 0;
+	myCamera.transform.position.y = 0;
 	myCamera.transform.position.z = levels[actualLevelIndex].startPoint - 10;
+	myCamera.transform.rotation = Quaternion.identity;
+	
 	nextGround = levels[actualLevelIndex].startPoint;
 	nextMountain = levels[actualLevelIndex].startPoint;
 	nextDetail = levels[actualLevelIndex].startPoint;

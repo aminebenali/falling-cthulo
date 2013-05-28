@@ -75,7 +75,6 @@ function OnDeath ()
 
 function OnAlive ()
 {
-	print ("PlayerStatus OnAlive");
 	Reset ();
 	//Invulnerabilize ();
 }
@@ -97,7 +96,7 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 		{
 			if (myTransform.position.z < hit.transform.position.z)
 			{
-				ReceiveDamage(3*velocity);
+				ReceiveDamage(2*velocity);
 			}
 		}
 		else
