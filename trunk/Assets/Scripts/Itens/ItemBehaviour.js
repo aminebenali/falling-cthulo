@@ -6,6 +6,16 @@
 #pragma strict
 var pickupSound : AudioClip;
 var pickupEffect : GameObject;
+protected var myRenderer : Renderer;
+
+function Start ()
+{
+	
+	if (!renderer)
+		myRenderer = GetComponentInChildren(Renderer);
+	else
+		myRenderer = renderer;
+}
 
 function OnTriggerEnter (other : Collider)
 {
@@ -13,6 +23,12 @@ function OnTriggerEnter (other : Collider)
 	{
 		PoolManager.Pools["Effects"].Spawn(pickupEffect.transform, transform.position, Quaternion.identity);
 		audio.PlayOneShot(pickupSound);
-	    renderer.enabled = false;
+
+		if (renderer)
+			myRenderer = renderer;
+		
+		myRenderer.enabled = false;
+		
+		print (gameObject);
 	}
 }

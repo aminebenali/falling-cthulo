@@ -14,9 +14,5 @@ class Deboost extends ItemBehaviour
 			super.OnTriggerEnter(other);
 			GameObject.FindGameObjectWithTag("Player").GetComponent(PlayerMovement).zSpeed /= 2;
 		}
-		else
-		{
-			Destroy(gameObject);
-		}
 	}
 }
