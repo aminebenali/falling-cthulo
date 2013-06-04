@@ -1,7 +1,7 @@
 //PlayerMovement 30/1/2013
 //How to use: Put this code into your player prefab
 //What it does: Move the character to the sides when acelerates and apply gravity. Also constraits the character.
-//Last Modified:27/5/2013
+//Last Modified:4/6/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -27,6 +27,8 @@ private var isCorrectingPositionOldValue : boolean = false;//The Old Value from 
 private var controller : CharacterController; //Character Controller Reference
 private var anim : Animator; //Animator reference
 private var myTransform : Transform;//Caching component lookup - Optimization Issue
+
+static var phantomMovement: boolean;
 
 @script AddComponentMenu("Characters/Cthulo Movement")
 
@@ -62,6 +64,8 @@ function Update()
 		zSpeed += (2*Time.deltaTime);
 	else if (zSpeed < 80)
 		zSpeed += Time.deltaTime;
+
+	
 	if (Application.isEditor)
 	    moveDirection = Vector3(Input.GetAxis("Horizontal") * xSpeed, Input.GetAxis("Vertical")*ySpeed, zSpeed);
 	else
@@ -99,8 +103,10 @@ function Update()
     impact = Vector3.Lerp(impact, Vector3.zero, 5*Time.deltaTime);
     
     // Move the controller
-    controller.Move(moveDirection * Time.deltaTime);
-    
+   	if (!PlayerStatus.invunerable)
+    	controller.Move(moveDirection * Time.deltaTime);
+    else
+    	transform.Translate(Vector3(moveDirection.x,moveDirection.y,80) * Time.deltaTime);
     anim.SetFloat("Speed", moveDirection.magnitude);
 }
 
