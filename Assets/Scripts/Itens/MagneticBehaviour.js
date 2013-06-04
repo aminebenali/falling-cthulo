@@ -13,6 +13,10 @@ class MagneticBehaviour extends ItemBehaviour
 	protected var sphereCollider : SphereCollider;
 	
 	public var colliderRadius : float = 10;
+	
+	public var duration:float = 30;
+	public var timer:float = 0;
+	public var dontTurnOff:boolean;
 
 	function Start ()
 	{
@@ -20,6 +24,21 @@ class MagneticBehaviour extends ItemBehaviour
 		myTransform = transform;
 	}
 		
+		
+	function Update ()
+	{
+		if (!dontTurnOff)
+			timer += Time.deltaTime;
+		if (timer > duration)
+			DespawnItem ();
+	}
+	
+	function DespawnItem ()
+	{
+		transform.parent = null;
+		PoolManager.Pools["Itens"].Despawn(transform);
+	}
+	
 	function FixedUpdate ()
 	{
 		if (playerPosition && atractedItemTransform)
@@ -28,9 +47,13 @@ class MagneticBehaviour extends ItemBehaviour
 				return;
 				
 			if (atractedItemTransform.rigidbody)
-				atractedItemTransform.rigidbody.AddForce (atractedItemTransform.position - transform.position);
+			{
+				atractedItemTransform.rigidbody.AddForce (transform.position - atractedItemTransform.position);
+			}
 			else
-				atractedItemTransform.Translate (atractedItemTransform.position - transform.position);
+			{
+				atractedItemTransform.Translate (transform.position - atractedItemTransform.position, Space.World);
+			}
 		}
 	}
 	

@@ -110,7 +110,6 @@ function Update ()
 		RenderSettings.fogColor = Color.Lerp (RenderSettings.fogColor, levels[actualLevelIndex].fogColor,renderSettingsBlender);
 		RenderSettings.ambientLight = Color.Lerp (RenderSettings.ambientLight, levels[actualLevelIndex].ambientColor,renderSettingsBlender);
 		RenderSettings.skybox.SetColor("_Tint", Color.Lerp (RenderSettings.skybox.GetColor("_Tint"), levels[actualLevelIndex].skyBox,renderSettingsBlender));
-		print (myDirectionalLight.intensity);
 		if (renderSettingsBlender > 1)
 		{
 			isChangingLevel = false;

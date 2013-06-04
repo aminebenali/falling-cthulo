@@ -40,7 +40,6 @@ function Start ()
 	cThulo = GameObject.Find("char_cthulhu_anim");
 	anim = GetComponentInChildren(Animator);
 	controller.Move(Vector3.forward);
-
 }
 
 function Update()
@@ -103,10 +102,13 @@ function Update()
     impact = Vector3.Lerp(impact, Vector3.zero, 5*Time.deltaTime);
     
     // Move the controller
-   	if (!PlayerStatus.invunerable)
+   	if (!phantomMovement)
     	controller.Move(moveDirection * Time.deltaTime);
     else
+    {
+	    zSpeed = 10;
     	transform.Translate(Vector3(moveDirection.x,moveDirection.y,80) * Time.deltaTime);
+    }
     anim.SetFloat("Speed", moveDirection.magnitude);
 }
 

@@ -106,6 +106,8 @@ class CoinBehaviour extends ItemBehaviour
 			transform.localScale.y = 0.5;
 			transform.localScale.z = 0.5;
 		}
+		
+		transform.localPosition = localPosition;
 	}
 	
 	function GoingBig()
