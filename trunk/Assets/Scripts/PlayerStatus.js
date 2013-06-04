@@ -16,7 +16,7 @@ public var deadReplacement : Transform;//dead gameobject
 public var deadBody : Transform;//deadbody transform
 
 private var turbilhaoDeVelocidade : ParticleSystem; //velocity feedback
-private var miasma : Light; //Life feedback
+//private var miasma : Light; //Life feedback
 private var controller : CharacterController;//Character Controller Reference
 private var myTransform : Transform;//Caching component lookup - Optimization Issue
 
@@ -27,7 +27,7 @@ function Awake ()
 {
  	myTransform = transform;
     controller = GetComponent(CharacterController);
-    miasma = GameObject.Find("Miasma").GetComponent(Light);
+    //miasma = GameObject.Find("Miasma").GetComponent(Light);
     turbilhaoDeVelocidade = GameObject.Find("Turbilhao").GetComponent(ParticleSystem);
 }
 
@@ -45,12 +45,12 @@ function Update ()
     velocity = controller.velocity.z;
     distance = myTransform.position.z;
     	
-    if (life > 100)
+    if (life >= 100)
     	life = 100;
     else
     	life += Time.deltaTime;
-    
-    miasma.intensity = life/50;
+    RenderSettings.haloStrength = life/100;
+    //miasma.intensity = life/50;
     turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/100;
 }
 

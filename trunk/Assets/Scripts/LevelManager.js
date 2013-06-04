@@ -1,7 +1,7 @@
 //Level Manager 31/1/2013
 //How to use: Put this code into a Game Manager Object
 //What it does: Level and Game Manager
-//Last Modified: 24/5/2013
+//Last Modified: 03/6/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -105,13 +105,17 @@ function Update ()
 	if (isChangingLevel)
 	{
 		renderSettingsBlender += Time.deltaTime/3;
+		iTween.ColorUpdate(myDirectionalLight.gameObject, levels[actualLevelIndex].directionalLightColor, 1f);
+		myDirectionalLight.intensity = iTween.FloatUpdate(myDirectionalLight.intensity, levels[actualLevelIndex].directionalColorIntensity, 1f);
 		RenderSettings.fogColor = Color.Lerp (RenderSettings.fogColor, levels[actualLevelIndex].fogColor,renderSettingsBlender);
 		RenderSettings.ambientLight = Color.Lerp (RenderSettings.ambientLight, levels[actualLevelIndex].ambientColor,renderSettingsBlender);
 		RenderSettings.skybox.SetColor("_Tint", Color.Lerp (RenderSettings.skybox.GetColor("_Tint"), levels[actualLevelIndex].skyBox,renderSettingsBlender));
-		iTween.ColorUpdate(myDirectionalLight.gameObject, levels[actualLevelIndex].directionalLightColor, 3f);
-		iTween.FloatUpdate(myDirectionalLight.intensity, levels[actualLevelIndex].directionalColorIntensity, 3f);
+		print (myDirectionalLight.intensity);
 		if (renderSettingsBlender > 1)
+		{
 			isChangingLevel = false;
+			renderSettingsBlender = 0;
+		}
 	}
 
 	if (menuMode)
