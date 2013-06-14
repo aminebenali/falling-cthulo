@@ -41,6 +41,7 @@ ModelImporter:
     100070: transform7
     100072: transform8
     100074: transform9
+    100076: tubarao
     400000: group
     400002: group1
     400004: group2
@@ -79,10 +80,13 @@ ModelImporter:
     400070: transform7
     400072: transform8
     400074: transform9
+    400076: tubarao
     4300000: polySurface2
+    4300002: tubarao
     7400000: Take 001
     9500000: //RootNode
     13700000: polySurface2
+    13700002: tubarao
   materials:
     importMaterials: 0
     materialName: 0
