@@ -36,7 +36,9 @@ function OnMouseEnter ()
 
 function OnMouseOver ()
 {
-    myRenderer.material.color -= Color(0, 0, 1) * Time.deltaTime;
+	if (levelManager.isChangingLevel)
+		return;
+    myRenderer.material.color -= Color(0, 1, 1) * Time.deltaTime;
 }
 
 function OnMouseExit ()
@@ -47,11 +49,14 @@ function OnMouseExit ()
 
 function OnMouseUpAsButton ()
 {
+	if (levelManager.isChangingLevel)
+		return;
 	switch (buttonType)
 	{
 		case ButtonFunction.Start:
 			levelManager.WannaPlay();
 			LevelManager.menuMode = false;
+			SendMessageUpwards("OnClickPlay");
 			break;
 		case ButtonFunction.Credits:
 			for (var i=0 ; i < creditsBubbles.Length; i++)
@@ -65,6 +70,7 @@ function OnMouseUpAsButton ()
 		case ButtonFunction.ChangeLvl:
 			levelManager.LevelUp();
 			levelManager.Restart();
+			levelManager.CreateMenu();
 		break;
 		case ButtonFunction.FittingRoom:
 			playerMovementOnMenu.inFittingRoom = true;

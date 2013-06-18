@@ -1,7 +1,7 @@
 //SmoothFollowCthulo 08/03/2013
 //How to use: Put this code into yout bubble with a 3d text and a particle parented
 //What it does: Animates the bubble
-//Last Modified: 8/03/2013
+//Last Modified: 18/06/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -16,7 +16,7 @@ function Start ()
 	miniBubbles.Pause();
 	greatGuy.enabled = false;
 	
-	iTween.MoveTo(gameObject,{"x" : Random.Range(-5,5) ,"y":Random.Range(-2,5),"time":Random.Range(2,5) , "delay":Random.Range(0,4), "easetype":iTween.EaseType.easeOutBack, "oncomplete": "BubbleExplosion"});
+	iTween.MoveTo(gameObject,{"x" : Random.Range(-15,15) ,"y":Random.Range(-2,10),"time":Random.Range(2,6) , "delay":Random.Range(0,4), "easetype":iTween.EaseType.easeOutBack, "oncomplete": "BubbleExplosion"});
 }
 
 function Update ()
