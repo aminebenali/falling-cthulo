@@ -1,7 +1,7 @@
 //Level Manager 31/1/2013
 //How to use: Put this code into a Game Manager Object
 //What it does: Level and Game Manager
-//Last Modified: 03/6/2013
+//Last Modified: 18/6/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -16,7 +16,7 @@ class LandMarks//LandMark Class
 class Obstacle//Obstacles Class
 {
 	var obstacle : Transform;//obstacle transform
-	var minimalDistanceToNextObstacle : float;//minimal distance to next obstacle so no detail or obstacle is created over an obstacle
+	var DistanceToNextObstacle : float = 100;//minimal distance to next obstacle so no detail or obstacle is created over an obstacle
 	var minX : float;//minimal value in X axis to spawn this Obstacle
 	var maxX : float;//maximum value in X axis to spawn this Obstacle
 }
@@ -61,7 +61,8 @@ private var nextDetail : float = 100;//tracker to next Detail
 private var nextObstacle : float = 100;//tracker to next Obstacle
 private var nextItem : float = -1;//tracker to next item
 
-private var isChangingLevel : boolean = true;//is true while damping level settings
+@HideInInspector
+public var isChangingLevel : boolean = true;//is true while damping level settings
 private var renderSettingsBlender : float = 0;//damping timer while changing level
 
 private var player : Transform; //Player Transform reference
@@ -88,7 +89,7 @@ function Awake ()
 	smoothFollowCthulo = myCamera.GetComponent(SmoothFollowCthulo);
 	vignet = myCamera.GetComponent(Vignetting);
 
-	myDirectionalLight = GameObject.FindObjectOfType(Light);
+	myDirectionalLight = GameObject.FindGameObjectWithTag("DirectionalLight").light;
 	lvlNameDisplay = GameObject.FindObjectOfType(GUIText);
 	
 	lvlNameDisplay.material.color.a = 0; //Bug Correction: When the project is reopened, the default value is getting back to 1;
@@ -139,8 +140,8 @@ function Update ()
 	else if (player.position.z > nextObstacle)
 	{
 		NewObstacle ();
-		nextObstacle += Random.Range(lastObstacle.minimalDistanceToNextObstacle, maxDistanceBetweenObstacles);
-		nextDetail += lastObstacle.minimalDistanceToNextObstacle;
+		nextObstacle += lastObstacle.DistanceToNextObstacle;
+		nextDetail += lastObstacle.DistanceToNextObstacle;
 	}
 	
 	else if (player.position.z > nextDetail)
@@ -230,6 +231,7 @@ function OnGUI ()
 
 function WannaPlay ()
 {
+//levels[actualLevelIndex].startPoint;
 	var wantedPlayerPosition : Vector3;
 	var wantedCameraPosition : Vector3;
 	wantedPlayerPosition = player.position;
@@ -237,7 +239,7 @@ function WannaPlay ()
 	wantedPlayerPosition.y = 0;
 	if (startedGame == false)
 	{
-		wantedPlayerPosition.z = 0;
+		wantedPlayerPosition.z = levels[actualLevelIndex].startPoint;
 		startedGame = true;
 	}
 	
@@ -298,7 +300,6 @@ function Restart ()
 {
 	iTween.Stop (myCamera.gameObject);
 	player.position.z = levels[actualLevelIndex].startPoint;
-	
 	myCamera.transform.position.x = 0;
 	myCamera.transform.position.y = 0;
 	myCamera.transform.position.z = levels[actualLevelIndex].startPoint - 20;
