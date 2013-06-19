@@ -10,7 +10,6 @@ enum ButtonFunction {Start, Credits, Exit, ChangeLvl, FittingRoom}; //Button Typ
 var buttonType : ButtonFunction; //Button Type
 
 var creditsBubbles : GameObject[];//Array with bubles from credits
-
 private var myRenderer : Renderer;//Caching component lookup - Optimization Issue
 private var levelManager : LevelManager;
 private var playerMovementOnMenu : PlayerMovementOnMenu;
@@ -36,6 +35,7 @@ function OnMouseEnter ()
 
 function OnMouseOver ()
 {
+	
 	if (levelManager.isChangingLevel)
 		return;
     myRenderer.material.color -= Color(0, 1, 1) * Time.deltaTime;
@@ -51,6 +51,8 @@ function OnMouseUpAsButton ()
 {
 	if (levelManager.isChangingLevel)
 		return;
+
+	yield;
 	switch (buttonType)
 	{
 		case ButtonFunction.Start:
@@ -77,7 +79,7 @@ function OnMouseUpAsButton ()
 		break;
 		default:
 		break;
-	} 
+	}
 }
 
 

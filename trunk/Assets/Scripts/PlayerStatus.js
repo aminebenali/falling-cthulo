@@ -28,7 +28,7 @@ function Awake ()
  	myTransform = transform;
     controller = GetComponent(CharacterController);
     //miasma = GameObject.Find("Miasma").GetComponent(Light);
-    turbilhaoDeVelocidade = GameObject.Find("Turbilhao").GetComponent(ParticleSystem);
+//    turbilhaoDeVelocidade = GameObject.Find("Turbilhao").GetComponent(ParticleSystem);
 }
 
 function Start ()
@@ -51,7 +51,7 @@ function Update ()
     	life += Time.deltaTime;
     RenderSettings.haloStrength = life/100;
     //miasma.intensity = life/50;
-    turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/100;
+//    turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/100;
 }
 
 function OnDeath ()
