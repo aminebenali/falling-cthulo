@@ -44,6 +44,8 @@ static var startedGame : boolean = false;//true is the game has already started
 static var menuMode : boolean = true; // Menu Mode On/Off
 
 var menu : GameObject; //Menu Elements
+var retryTexture : GUITexture;
+var quitTexture : GUITexture;
 
 var maxDistanceBetweenDetail : float = 100; //Max Distance between Details
 var minDistanceBetweenDetail : float = 1;// Min Distance between Details
@@ -214,18 +216,18 @@ function OnGUI ()
  	GUILayout.Label("Total Distance: " + player.position.z);
  	GUILayout.Label("Total Coins: " + playerStatus.coins);
 
- 	if (GUILayout.Button("Try Again"))
+/* 	if (GUILayout.Button(retryTexture))
  	{
  		Restart();
  		SendMessageUpwards("OnAlive");
     }
     
-    if (GUILayout.Button("Return to Menu"))
+    if (GUILayout.Button(quitTexture))
  	{
  	 	menuMode = true;
  		SendMessageUpwards("OnAlive");
  		Start ();
-    }
+    }*/
  	GUILayout.EndArea();
 }
 

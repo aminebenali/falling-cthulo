@@ -1,13 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Rotate.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelManager.js">
     <Files>
-      <File FileName="Assets\Scripts\LevelManager.js" Line="144" Column="30" />
-      <File FileName="Assets\Scripts\MenuButtons.js" Line="59" Column="36" />
-      <File FileName="Assets\Scripts\Buoyance.js" Line="25" Column="1" />
+      <File FileName="Assets\Scripts\LevelManager.js" Line="106" Column="1" />
+      <File FileName="Assets\Scripts\Buoyance.js" Line="32" Column="1" />
       <File FileName="Assets\Scripts\PlayerMovement.js" Line="195" Column="1" />
-      <File FileName="Assets\Scripts\MenuManager.js" Line="15" Column="27" />
       <File FileName="Assets\Scripts\Rotate.js" Line="26" Column="2" />
+      <File FileName="Assets\Scripts\PlayerStatus.js" Line="31" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
