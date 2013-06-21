@@ -32,15 +32,15 @@ class CoinBehaviour extends ItemBehaviour
 	
 		if (isBigCoin && transform.localScale.x != 2)
 		{
-			transform.localScale.x = 2;
-			transform.localScale.y = 2;
-			transform.localScale.z = 2;
+			transform.localScale.x = 1.5;
+			transform.localScale.y = 1.5;
+			transform.localScale.z = 1.5;
 		}
-		if (!isBigCoin && transform.localScale.x != 0.5)
+		if (!isBigCoin && transform.localScale.x != 1)
 		{
-			transform.localScale.x = 0.5;
-			transform.localScale.y = 0.5;
-			transform.localScale.z = 0.5;
+			transform.localScale.x = 1;
+			transform.localScale.y = 1;
+			transform.localScale.z = 1;
 		}
 		
 		if (!isBigCoin)

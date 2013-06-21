@@ -16,7 +16,8 @@ public var deadReplacement : Transform;//dead gameobject
 public var deadBody : Transform;//deadbody transform
 
 private var turbilhaoDeVelocidade : ParticleSystem; //velocity feedback
-//private var miasma : Light; //Life feedback
+private var turbilhaoDeSuperVelocidade : ParticleSystem; //velocity feedback
+private var miasma : ParticleSystem; //Life feedback
 private var controller : CharacterController;//Character Controller Reference
 private var myTransform : Transform;//Caching component lookup - Optimization Issue
 
@@ -27,8 +28,10 @@ function Awake ()
 {
  	myTransform = transform;
     controller = GetComponent(CharacterController);
-    //miasma = GameObject.Find("Miasma").GetComponent(Light);
-//    turbilhaoDeVelocidade = GameObject.Find("Turbilhao").GetComponent(ParticleSystem);
+ 	miasma = GameObject.Find("miasma").GetComponent(ParticleSystem);
+    turbilhaoDeVelocidade = GameObject.Find("TurbilhaoDeBolhas").GetComponent(ParticleSystem);
+    turbilhaoDeSuperVelocidade = GameObject.Find("Turbilhao2").GetComponent(ParticleSystem);
+
 }
 
 function Start ()
@@ -49,9 +52,38 @@ function Update ()
     	life = 100;
     else
     	life += Time.deltaTime;
-    RenderSettings.haloStrength = life/100;
-    //miasma.intensity = life/50;
-//    turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/100;
+    
+    miasma.startSize = life/100;
+    turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/200;
+    if (velocity > 60)
+    {
+    	if (!turbilhaoDeSuperVelocidade.active)
+    		turbilhaoDeSuperVelocidade.Play();
+    	turbilhaoDeSuperVelocidade.emissionRate = velocity - 60;
+    }
+    else
+    {
+        if (turbilhaoDeSuperVelocidade.isPlaying)
+        	turbilhaoDeSuperVelocidade.Stop();
+    }
+    if (isDead)
+    {
+    	DisableParticles ();
+    }
+}
+
+function DisableParticles ()
+{
+   	miasma.Stop();
+   	turbilhaoDeSuperVelocidade.Stop ();
+   	turbilhaoDeVelocidade.Stop ();
+}
+
+function EnableParticles ()
+{
+	miasma.Play();
+	turbilhaoDeVelocidade.Play();
+	turbilhaoDeVelocidade.Play();
 }
 
 function OnDeath ()
@@ -82,6 +114,7 @@ function OnAlive ()
 function ReceiveDamage (damage : float)
 {
 	life -= damage;
+	print (damage);
 	if (life < 0)
 	{
 	 	BroadcastMessage ("OnDeath");
@@ -96,7 +129,7 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 		{
 			if (myTransform.position.z < hit.transform.position.z)
 			{
-				ReceiveDamage(2*velocity);
+				ReceiveDamage(velocity);
 			}
 		}
 		else
@@ -124,6 +157,7 @@ function Reset ()
 {
 	life = 100;
 	isDead = false;
+	EnableParticles();
 }
 
 function Invulnerabilize ()
