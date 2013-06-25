@@ -12,6 +12,7 @@ var changeStageButton : GameObject;
 var shopButton : GameObject;
 var archievementButton : GameObject;
 var customButton : GameObject;
+var mirror : GameObject;
 
 private var buoyance : Buoyance[];
 private var customButtonBouyScript : Buoyance;
@@ -78,13 +79,15 @@ function OnClickArchievement ()
 function OnClickCustom ()
 {
 	customButtonBouyScript.enabled = false;
-	iTween.MoveBy(customButton, {"x": -1,"y":-3.5,"z":-5, "time":1, "space": Space.World,"oncomplete":"MoveToFittingRoom", "oncompletetarget": gameObject});
+	iTween.MoveBy(mirror, {"x": -1.5,"y":-32.5,"z":-8.4, "time":3, "space": Space.World});
+	iTween.MoveBy(customButton, {"x": 7,"y":-2,"z":-13, "time":1, "space": Space.World,"oncomplete":"MoveToFittingRoom", "oncompletetarget": gameObject});
 	iTween.RotateTo(customButton, {"x": 0, "time":1, "space": Space.World});
 }
 
 function OnClickDesCustom ()
 {
-	iTween.MoveBy(customButton, {"x": 1,"y":3.5,"z":5, "time":1, "space": Space.World});
+	iTween.MoveBy(mirror, {"x": 1.5,"y":32.5,"z":8.4, "time":1, "space": Space.World});
+	iTween.MoveBy(customButton, {"x": -7,"y":2,"z":13, "time":1, "space": Space.World});
 	iTween.RotateTo(customButton, {"x": 90, "time":1, "space": Space.World});
 	yield WaitForSeconds (1);
 	customButtonBouyScript.enabled = true;
