@@ -32,7 +32,7 @@ function OnMouseEnter ()
     switch (buttonType)
 	{
 		default:
-			playerMovementOnMenu.inFittingRoom = false;
+			//playerMovementOnMenu.inFittingRoom = false;
 		break;
 	} 
 }
@@ -60,6 +60,13 @@ function OnMouseUpAsButton ()
 {
 	if (levelManager.isChangingLevel)
 		return;
+		
+	if (playerMovementOnMenu.inFittingRoom)
+	{
+		SendMessageUpwards("OnClickDesCustom");
+		playerMovementOnMenu.inFittingRoom = false;
+		return;
+	}
 
 	yield;
 	switch (buttonType)
@@ -79,12 +86,14 @@ function OnMouseUpAsButton ()
 			Application.Quit();
 		break;
 		case ButtonFunction.ChangeLvl:
+			SendMessageUpwards("OnClickChangeStage");
 			levelManager.LevelUp();
 			levelManager.Restart();
 			levelManager.CreateMenu();
 		break;
 		case ButtonFunction.FittingRoom:
-			playerMovementOnMenu.inFittingRoom = true;
+				SendMessageUpwards("OnClickCustom");
+				playerMovementOnMenu.inFittingRoom = true;
 		break;
 		default:
 		break;

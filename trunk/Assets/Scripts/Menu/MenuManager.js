@@ -3,6 +3,7 @@
 //What it does: Menu animation control and Menu Flow
 //Last Modified: 18/6/2013
 //by Yves J. Albuquerque
+
 #pragma strict
 
 var playButton : GameObject;
@@ -13,10 +14,15 @@ var archievementButton : GameObject;
 var customButton : GameObject;
 
 private var buoyance : Buoyance[];
+private var customButtonBouyScript : Buoyance;
+private var player : GameObject;
 
 function Start ()
 {
+	player = GameObject.FindGameObjectWithTag("Player");
+
 	var buoyanceComponents:Component[];
+	customButtonBouyScript = customButton.GetComponent(Buoyance);
 	buoyanceComponents = gameObject.GetComponentsInChildren(Buoyance, true);
 	buoyance = new Buoyance[buoyanceComponents.Length];
 	for (var i : int = 0; i<buoyanceComponents.Length;i++)
@@ -58,6 +64,7 @@ function OnClickCredits ()
 
 function OnClickChangeStage ()
 {
+	iTween.RotateBy(changeStageButton, {"x": 1, "time":1, "space": Space.World});
 }
 
 function OnClickShop ()
@@ -70,4 +77,24 @@ function OnClickArchievement ()
 
 function OnClickCustom ()
 {
+	customButtonBouyScript.enabled = false;
+	iTween.MoveBy(customButton, {"x": -1,"y":-3.5,"z":-5, "time":1, "space": Space.World,"oncomplete":"MoveToFittingRoom", "oncompletetarget": gameObject});
+	iTween.RotateTo(customButton, {"x": 0, "time":1, "space": Space.World});
 }
+
+function OnClickDesCustom ()
+{
+	iTween.MoveBy(customButton, {"x": 1,"y":3.5,"z":5, "time":1, "space": Space.World});
+	iTween.RotateTo(customButton, {"x": 90, "time":1, "space": Space.World});
+	yield WaitForSeconds (1);
+	customButtonBouyScript.enabled = true;
+
+}
+
+
+function MoveToFittingRoom ()
+{
+	print ("MoveToFittingRoom");
+	iTween.MoveTo(player,{"position" : customButton.transform.position + Vector3.up, "time":1f, "easetype":"easeOutQuad", "looktarget" : customButton.transform.position + 5*Vector3.up -Vector3.forward});
+}
+

@@ -65,7 +65,7 @@ private var nextItem : float = -1;//tracker to next item
 
 @HideInInspector
 public var isChangingLevel : boolean = true;//is true while damping level settings
-private var renderSettingsBlender : float = 0;//damping timer while changing level
+private var renderSettingsBlender : float = 1;//damping timer while changing level
 
 private var player : Transform; //Player Transform reference
 private var playerMovement : PlayerMovement;//PlayerMovement script Reference

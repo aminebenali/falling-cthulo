@@ -13,7 +13,6 @@ private var controller : CharacterController; //Character Controller Reference
 private var myCamera : Camera; //main Camera reference
 
 private var myTransform : Transform; //Caching component lookup - Optimization Issue
-private var myFittingRoom : Transform;
 @HideInInspector
 public var inFittingRoom : boolean = false; //Falta implementar
 @script AddComponentMenu("Characters/Cthulo Movement On Menu")
@@ -32,14 +31,7 @@ function FixedUpdate ()
 		return;
 		
 	if (inFittingRoom)
-	{
-		if(!myFittingRoom)
-			myFittingRoom = GameObject.Find("FittingRoom").transform;
-		
-		print (myFittingRoom);
-		iTween.MoveTo(gameObject,{"position" : myFittingRoom.position + Vector3.up, "time":2f, "easetype":"easeOutQuad", "looktarget" : myFittingRoom.position + 5*Vector3.up -Vector3.forward});
 		return;
-	}
 
     var ray = myCamera.ScreenPointToRay (Input.mousePosition);
 	var hit : RaycastHit;
