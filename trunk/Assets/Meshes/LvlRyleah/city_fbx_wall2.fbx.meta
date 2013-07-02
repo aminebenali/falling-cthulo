@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f1aa23844d6c74c00a37d58a5eadd98b
+guid: 6f6f100d0b0bb074b9a1b7d68693cb6d
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -7,11 +7,10 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cauldron
-    4300002: Cauldron01
-    11100000: //RootNode
+    4300000: pCube1
+    9500000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -31,7 +30,7 @@ ModelImporter:
     addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     weldVertices: 1
