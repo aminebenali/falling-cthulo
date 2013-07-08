@@ -27,8 +27,6 @@ function OnTriggerEnter (other : Collider)
 		if (renderer)
 			myRenderer = renderer;
 		
-		myRenderer.enabled = false;
-		
-		print (gameObject);
+		myRenderer.enabled = false;		
 	}
 }

@@ -12,7 +12,6 @@ var buttonType : ButtonFunction; //Button Type
 var creditsBubbles : GameObject[];//Array with bubles from credits
 private var myRenderer : Renderer;//Caching component lookup - Optimization Issue
 private var levelManager : LevelManager;
-private var playerMovementOnMenu : PlayerMovementOnMenu;
 private var originalShader : Shader;
 private var alternativeShader : Shader = Shader.Find("Transparent/Diffuse");
 
@@ -24,7 +23,6 @@ function Start ()
 	myRenderer = renderer;
 	originalShader = myRenderer.material.shader;
 	levelManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent(LevelManager);
-	playerMovementOnMenu = GameObject.FindGameObjectWithTag("Player").GetComponent(PlayerMovementOnMenu);
 }
 
 function OnMouseEnter ()
@@ -58,13 +56,10 @@ function OnMouseExit ()
 
 function OnMouseUpAsButton ()
 {
-	if (levelManager.isChangingLevel)
-		return;
-		
-	if (playerMovementOnMenu.inFittingRoom)
+	if (MenuManager.inFittingRoom)
 	{
 		SendMessageUpwards("OnClickDesCustom");
-		playerMovementOnMenu.inFittingRoom = false;
+		MenuManager.inFittingRoom = false;
 		return;
 	}
 
@@ -73,7 +68,6 @@ function OnMouseUpAsButton ()
 	{
 		case ButtonFunction.Start:
 			levelManager.WannaPlay();
-			LevelManager.menuMode = false;
 			SendMessageUpwards("OnClickPlay");
 			break;
 		case ButtonFunction.Credits:
@@ -89,20 +83,12 @@ function OnMouseUpAsButton ()
 			SendMessageUpwards("OnClickChangeStage");
 			levelManager.LevelUp();
 			levelManager.Restart();
-			levelManager.CreateMenu();
 		break;
 		case ButtonFunction.FittingRoom:
 				SendMessageUpwards("OnClickCustom");
-				playerMovementOnMenu.inFittingRoom = true;
+				MenuManager.inFittingRoom = true;
 		break;
 		default:
 		break;
 	}
-}
-
-
-function TurnOffMenu ()
-{
-	print ("turnOff");
-	LevelManager.menuMode = false;
 }

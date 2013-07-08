@@ -1,7 +1,7 @@
 //Playerstatus 31/1/2013
 //How to use: Put this code into the Player Game Object
 //What it does: Manage the distance, life, velocity and related behaviours of the Player
-//Last Modified: 26/5/2013
+//Last Modified: 07/07/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -11,6 +11,7 @@ public static var velocity : float = 0; //Current Velocity
 public static var coins : int = 0; //Total coins taked
 public static var isDead : boolean = false; //is dead?
 public static var invunerable : boolean;// invunerabily on/off
+private var cthuloAlive : SkinnedMeshRenderer;//SkennedMeshRenderer Reference
 public var deadReplacement : Transform;//dead gameobject
 @HideInInspector
 public var deadBody : Transform;//deadbody transform
@@ -31,6 +32,7 @@ function Awake ()
  	miasma = GameObject.Find("miasma").GetComponent(ParticleSystem);
     turbilhaoDeVelocidade = GameObject.Find("TurbilhaoDeBolhas").GetComponent(ParticleSystem);
     turbilhaoDeSuperVelocidade = GameObject.Find("Turbilhao2").GetComponent(ParticleSystem);
+	cthuloAlive = GameObject.FindObjectOfType(SkinnedMeshRenderer);
 
 }
 
@@ -45,6 +47,7 @@ function Update ()
 {
 	if (isDead)
 		return;
+    
     velocity = controller.velocity.z;
     distance = myTransform.position.z;
     	
@@ -55,6 +58,7 @@ function Update ()
     
     miasma.startSize = life/100;
     turbilhaoDeVelocidade.emissionRate = (velocity*velocity)/200;
+    
     if (velocity > 60)
     {
     	if (!turbilhaoDeSuperVelocidade.active)
@@ -66,10 +70,7 @@ function Update ()
         if (turbilhaoDeSuperVelocidade.isPlaying)
         	turbilhaoDeSuperVelocidade.Stop();
     }
-    if (isDead)
-    {
-    	DisableParticles ();
-    }
+
 }
 
 function DisableParticles ()
@@ -83,38 +84,41 @@ function EnableParticles ()
 {
 	miasma.Play();
 	turbilhaoDeVelocidade.Play();
-	turbilhaoDeVelocidade.Play();
 }
 
 function OnDeath ()
 {
 	if (!isDead)
 	{
+		isDead = true;
+		LevelManager.gameStatus = GameStatus.GameResults;
+    	DisableParticles ();
+
+		//Instantiate Rigdoll
 		var startingVelocity : Vector3 = controller.velocity;
 
-		isDead = true;
 		deadBody = Instantiate(deadReplacement, transform.position, transform.rotation);
 		CopyTransformsRecurse(transform, deadBody);
 		var deadRigidBody : Rigidbody = deadBody.GetComponentInChildren(Rigidbody);
 		deadRigidBody.velocity = controller.velocity;
-		
 		for (var body:Rigidbody in deadBody.GetComponentsInChildren(Rigidbody))
 		{
 			 body.velocity = startingVelocity;
 		}
+		
+		cthuloAlive.active = false;
 	}
 }
 
 function OnAlive ()
 {
 	Reset ();
-	//Invulnerabilize ();
+	cthuloAlive.active = true;
 }
 
 function ReceiveDamage (damage : float)
 {
 	life -= damage;
-	print (damage);
 	if (life < 0)
 	{
 	 	BroadcastMessage ("OnDeath");
@@ -134,7 +138,7 @@ function OnControllerColliderHit (hit : ControllerColliderHit)
 		}
 		else
 		{
-			ReceiveDamage(velocity);
+			ReceiveDamage(2*velocity/3);
 		}
 	}
 }
@@ -155,6 +159,7 @@ function CopyTransformsRecurse (src : Transform,  dst : Transform)
 
 function Reset ()
 {
+	
 	life = 100;
 	isDead = false;
 	EnableParticles();
@@ -172,4 +177,9 @@ function Invulnerabilize (timer : float)
 	yield WaitForSeconds (timer);
 	invunerable = false;
 	controller.collider.enabled = true;
+}
+
+function OnGUI ()
+{
+	GUI.Label(Rect (Screen.width-50,50,50,50),"$: " + coins);
 }

@@ -1,7 +1,7 @@
 //PlayerMovement 30/1/2013
 //How to use: Put this code into your player prefab
 //What it does: Move the character to the sides when acelerates and apply gravity. Also constraits the character.
-//Last Modified:4/6/2013
+//Last Modified:07/07/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -39,13 +39,17 @@ function Start ()
 	myTransform = transform;
 	cThulo = GameObject.Find("char_cthulhu_anim");
 	anim = GetComponentInChildren(Animator);
-	controller.Move(Vector3.forward);
 }
 
 function Update()
 {
-	if (LevelManager.menuMode || PlayerStatus.isDead)
+	if (LevelManager.gameStatus != GameStatus.InGame)
 		return;
+
+	if (PlayerStatus.isDead)
+		return;
+
+		
 	var xAcc : float;
 	var yAcc : float;
 	
@@ -121,18 +125,15 @@ function AddImpact(dir: Vector3, force: float)
  	impact += dir.normalized * force;
 }
 
-function OnGUI ()
-{
-	GUILayout.Label("\n");
-	GUILayout.Label("x" + Input.acceleration.x.ToString());
-	GUILayout.Label("y" + Input.acceleration.y.ToString());
-	GUILayout.Label("z" + Input.acceleration.z.ToString());
-}
 
 function OnControllerColliderHit (hit : ControllerColliderHit)
 {
-	if (LevelManager.menuMode)
+	if (LevelManager.gameStatus == GameStatus.InGame)
 		return;
+		
+	if (PlayerStatus.isDead)
+		return;
+		
 	if (controller.collisionFlags & CollisionFlags.Sides)
 	{
 		if (myTransform.position.z < hit.transform.position.z)
@@ -194,8 +195,7 @@ function OnDeath ()
 
 function OnAlive ()
 {
-	print ("PlayerMovement OnAlive");
-	zSpeed = 1;
+	zSpeed = 10;
 }
 
 
