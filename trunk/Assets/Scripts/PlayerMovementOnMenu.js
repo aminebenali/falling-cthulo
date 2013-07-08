@@ -1,7 +1,7 @@
 //PlayerMovement 9/3/2013
 //How to use: Put this code into your player prefab
 //What it does: Character Follow Mouse
-//Last Modified:04/04/2013
+//Last Modified:07/07/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -13,8 +13,6 @@ private var controller : CharacterController; //Character Controller Reference
 private var myCamera : Camera; //main Camera reference
 
 private var myTransform : Transform; //Caching component lookup - Optimization Issue
-@HideInInspector
-public var inFittingRoom : boolean = false; //Falta implementar
 @script AddComponentMenu("Characters/Cthulo Movement On Menu")
 
 
@@ -27,10 +25,10 @@ function Start ()
  
 function FixedUpdate ()
 {
-	if (!LevelManager.menuMode)
+	if (LevelManager.gameStatus != GameStatus.StartMenu)
 		return;
 		
-	if (inFittingRoom)
+	if (MenuManager.inFittingRoom)
 		return;
 
     var ray = myCamera.ScreenPointToRay (Input.mousePosition);

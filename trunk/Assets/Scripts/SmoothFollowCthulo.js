@@ -1,7 +1,7 @@
 //SmoothFollowCthulo 30/01/2013
 //How to use: Put this code into the Main Camera.
 //What it does: Follows the target Player
-//Last Modified: 1/3/2013
+//Last Modified: 07/07/2013
 //by Yves J. Albuquerque
 
 #pragma strict
@@ -31,6 +31,9 @@ function LateUpdate ()
 {
 	if (!target)
 		target = GameObject.FindGameObjectWithTag("Player").transform;
+	
+	if (LevelManager.gameStatus != GameStatus.InGame)
+		return;
 		
 	var wantedSide = target.position.x;
 	var wantedHeight = target.position.y + height;
