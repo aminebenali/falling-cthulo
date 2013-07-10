@@ -106,54 +106,56 @@ public class ImageEffects {
 		// Make the destination texture the target for all rendering
 		RenderTexture.active = dest;  		
 		// Assign the source texture to a property from a shader
-		source.SetGlobalShaderProperty ("__RenderTex");	
+		source.SetGlobalShaderProperty ("__RenderTex");
+		bool invertY = source.texelSize.y < 0.0f;
 		// Set up the simple Matrix
 		GL.PushMatrix ();
 		GL.LoadOrtho ();
 		Material blitMaterial = GetBlitMaterial(blendMode);
 		for (int i = 0; i < blitMaterial.passCount; i++) {
 			blitMaterial.SetPass (i);
-			DrawQuad();
+			DrawQuad(invertY);
 		}
 		GL.PopMatrix ();
 	}
 	
-	
 	public static void BlitWithMaterial (Material material, RenderTexture source, RenderTexture destination)
 	{
-		RenderTexture.active = destination;		
-		material.SetTexture("_MainTex", source);
-		
-		GL.PushMatrix ();
-		GL.LoadOrtho ();
-		
-		for (int i = 0; i < material.passCount; i++) {
-			material.SetPass (i);
-			ImageEffects.DrawQuad();
-		}
-		GL.PopMatrix ();
+		Graphics.Blit (source, destination, material);
 	}
 	
 	
 	public static void RenderDistortion (Material material, RenderTexture source, RenderTexture destination, float angle, Vector2 center, Vector2 radius)
 	{
-		Matrix4x4 rotationMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0, 0, angle), Vector3.one);
+		bool invertY = source.texelSize.y < 0.0f;
+		if (invertY) {
+			center.y = 1.0f-center.y;
+			angle = -angle;
+		}
 		
+		Matrix4x4 rotationMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0, 0, angle), Vector3.one);
+				
 		material.SetMatrix("_RotationMatrix", rotationMatrix);
 		material.SetVector("_CenterRadius", new Vector4(center.x,center.y,radius.x,radius.y) );
 		material.SetFloat("_Angle", angle * Mathf.Deg2Rad);
 		
-		ImageEffects.BlitWithMaterial( material, source, destination );
+		Graphics.Blit (source, destination, material);
 	}
 	
 	
-	public static void DrawQuad()
+	public static void DrawQuad(bool invertY)
 	{
-		GL.Begin (GL.QUADS);		
-		GL.TexCoord2( 0.0f, 0.0f ); GL.Vertex3( 0.0f, 0.0f, 0.1f );
-		GL.TexCoord2( 1.0f, 0.0f ); GL.Vertex3( 1.0f, 0.0f, 0.1f );
-		GL.TexCoord2( 1.0f, 1.0f ); GL.Vertex3( 1.0f, 1.0f, 0.1f );
-		GL.TexCoord2( 0.0f, 1.0f ); GL.Vertex3( 0.0f, 1.0f, 0.1f );
+		GL.Begin (GL.QUADS);
+		float y1, y2;
+		if (invertY) {
+			y1 = 1.0f; y2 = 0.0f;
+		} else {
+			y1 = 0.0f; y2 = 1.0f;
+		}
+		GL.TexCoord2( 0.0f, y1 ); GL.Vertex3( 0.0f, 0.0f, 0.1f );
+		GL.TexCoord2( 1.0f, y1 ); GL.Vertex3( 1.0f, 0.0f, 0.1f );
+		GL.TexCoord2( 1.0f, y2 ); GL.Vertex3( 1.0f, 1.0f, 0.1f );
+		GL.TexCoord2( 0.0f, y2 ); GL.Vertex3( 0.0f, 1.0f, 0.1f );
 		GL.End();
 	}
 	
