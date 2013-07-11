@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: d8b0e6264cf6c480091821928a9c05e2
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - explosionCoin: {fileID: 400000, guid: 4edcee245666941cf8008c1f6732a293, type: 2}
+  - soundCoinEarn: {fileID: 8300000, guid: 6a2d6d650eaca4ac18f2f482f47a753f, type: 3}
+  - explosionTimeBonus: {fileID: 400000, guid: 542f86e4e34b523499e0f073b1355e1a, type: 2}
+  - soundTimeBonusEarn: {fileID: 8300000, guid: 1f53d36a176f848aeb7d99c0a74a3e78,
+      type: 3}
+  - explosionWeaponBonus: {fileID: 400000, guid: 9c5bd6070cd5d481abdb8755ff51fd7a,
+      type: 2}
+  - soundWeaponBonusEarn: {fileID: 8300000, guid: b05b14d51f0254183a4f07413de240a5,
+      type: 3}
+  - explosionShieldBonus: {fileID: 400004, guid: 169b10ce10f4327cb9f40f6b117ed8d7,
+      type: 2}
+  - soundShieldBonusEarn: {fileID: 8300000, guid: bec4af35ec4634c2ca484334354a0109,
+      type: 3}
+  - explosionUserCrash: {fileID: 400000, guid: 01174e4954348268c150b6f98c48939f, type: 2}
+  - soundUserCrash: {fileID: 8300000, guid: c424599c1fe104c219eb3bd98a5a6af3, type: 3}
+  - explosionUserDie: {fileID: 400000, guid: c994fde8e6848a3771503f184e0c9cb4, type: 2}
+  - soundUserDie: {fileID: 8300000, guid: 20840121befa3419096fc726a959a1ef, type: 3}
+  - sparkWall: {fileID: 400000, guid: 4edcee245666941cf8008c1f6732a293, type: 2}
+  - soundWallSpark: {fileID: 8300000, guid: 296c319f58fa840ac9f1b7b8603ca3e8, type: 3}
+  executionOrder: 300
+  icon: {instanceID: 0}
+  userData: 
