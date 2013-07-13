@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 
 class FBXPostprocessor : AssetPostprocessor
@@ -7,7 +7,6 @@ class FBXPostprocessor : AssetPostprocessor
     void OnPreprocessModel()
     {
         ModelImporter mi = (ModelImporter)assetImporter;
-        mi.globalScale = 1;
         if (!assetPath.Contains("/characters/")) return;
         mi.animationCompression = ModelImporterAnimationCompression.Off;
 
