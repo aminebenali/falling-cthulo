@@ -1,9 +1,9 @@
-#pragma strict
 //Playerstatus 2/4/2013
 //How to use: Put this code into your Item
 //What it does: Align with Player, set a radius and move atractedObject to player position
-//Last Modified: 4/6/2013
+//Last Modified: 20/7/2013
 //by Yves J. Albuquerque
+#pragma strict
 
 class MagneticBehaviour extends ItemBehaviour
 {	
@@ -16,7 +16,8 @@ class MagneticBehaviour extends ItemBehaviour
 	
 	public var duration:float = 30;
 	public var timer:float = 0;
-	public var dontTurnOff:boolean;
+	
+	private var withPlayer : boolean;
 
 	function Start ()
 	{
@@ -27,25 +28,18 @@ class MagneticBehaviour extends ItemBehaviour
 		
 	function Update ()
 	{
-		if (!dontTurnOff)
-			timer += Time.deltaTime;
+		timer += Time.deltaTime;
 		if (timer > duration)
 			DespawnItem ();
 	}
 	
-	function DespawnItem ()
-	{
-		transform.parent = null;
-		PoolManager.Pools["Itens"].Despawn(transform);
-	}
-	
 	function FixedUpdate ()
 	{
-		if (playerPosition && atractedItemTransform)
-		{
-			if (atractedItemTransform.renderer.enabled == false)
-				return;
-				
+		if (withPlayer)
+			transform.position = playerPosition.position;
+	
+		if (atractedItemTransform)
+		{	
 			if (atractedItemTransform.rigidbody)
 			{
 				atractedItemTransform.rigidbody.AddForce (transform.position - atractedItemTransform.position);
@@ -59,12 +53,31 @@ class MagneticBehaviour extends ItemBehaviour
 	
 	function OnTriggerEnter (other : Collider)
 	{
-		sphereCollider.radius = 8;
-		if (other.CompareTag("Player"))
+		super.OnTriggerEnter(other);
+		
+		if (!withPlayer)
 		{
-			playerPosition = other.transform;
-			transform.position = other.transform.position;
-			transform.parent = playerPosition;
+			if (other.CompareTag("Player"))
+			{
+				withPlayer = true;
+				sphereCollider.radius = 8;
+				return;
+			}
 		}
+		
+		atractedItemTransform = other.transform;
+
+	}
+	
+	function OnSpawned ()
+	{
+		super.OnSpawned();
+		sphereCollider.radius = 1;
+	}
+	
+	function DespawnItem ()
+	{
+		withPlayer = false;
+		PoolManager.Pools["Itens"].Despawn(transform);
 	}
 }

@@ -5,6 +5,7 @@ class ProbableItem
 	var probability : float;
 }
 
+var chanceToSpawnSomething : float;
 var probableItem : ProbableItem[];
 
 function OnDrawGizmos ()
@@ -16,7 +17,10 @@ function OnDrawGizmos ()
 function OnSpawned ()
 {
 	yield;
-	PoolManager.Pools["Itens"].Spawn(probableItem[ChooseItem()].item.transform,transform.position,Quaternion.identity);
+	if (PlayerStatus.invunerable)
+	 	return;
+	 if (Random.value*100 <chanceToSpawnSomething)
+		PoolManager.Pools["Itens"].Spawn(probableItem[ChooseItem()].item.transform,transform.position,Quaternion.identity);
 }
 
 function ChooseItem()
