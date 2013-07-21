@@ -9,6 +9,13 @@ class MagneticCoin extends MagneticBehaviour
 {	
 	function OnTriggerEnter (other : Collider)
 	{
+		if (other.CompareTag("Player"))
+		{
+			super.OnTriggerEnter(other);
+
+			return;
+		}
+	
 		if (other.CompareTag("Coin"))
 		{
 			super.OnTriggerEnter(other);

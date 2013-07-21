@@ -21,8 +21,8 @@ class MagneticBehaviour extends ItemBehaviour
 
 	function Start ()
 	{
-		sphereCollider = GetComponent(SphereCollider);
-		myTransform = transform;
+		super.Start ();
+		OnSpawned();
 	}
 		
 		
@@ -36,7 +36,7 @@ class MagneticBehaviour extends ItemBehaviour
 	function FixedUpdate ()
 	{
 		if (withPlayer)
-			transform.position = playerPosition.position;
+			transform.position = playerPosition.position + 3*Vector3.forward;
 	
 		if (atractedItemTransform)
 		{	
@@ -46,7 +46,8 @@ class MagneticBehaviour extends ItemBehaviour
 			}
 			else
 			{
-				atractedItemTransform.Translate (transform.position - atractedItemTransform.position, Space.World);
+				var directionToGo : Vector3 = transform.position - atractedItemTransform.position;
+				atractedItemTransform.Translate (directionToGo.normalized, Space.World);
 			}
 		}
 	}
@@ -54,24 +55,33 @@ class MagneticBehaviour extends ItemBehaviour
 	function OnTriggerEnter (other : Collider)
 	{
 		super.OnTriggerEnter(other);
-		
+		print (withPlayer);
+
 		if (!withPlayer)
 		{
+
 			if (other.CompareTag("Player"))
 			{
 				withPlayer = true;
 				sphereCollider.radius = 8;
+				playerPosition = other.transform;
 				return;
 			}
+			
 		}
 		
 		atractedItemTransform = other.transform;
-
 	}
 	
 	function OnSpawned ()
 	{
 		super.OnSpawned();
+		if (!myTransform)
+			myTransform = transform;
+
+		if (!sphereCollider)
+			sphereCollider = GetComponent(SphereCollider);
+
 		sphereCollider.radius = 1;
 	}
 	

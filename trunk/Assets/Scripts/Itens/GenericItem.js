@@ -8,6 +8,11 @@ class ProbableItem
 var chanceToSpawnSomething : float;
 var probableItem : ProbableItem[];
 
+function Start ()
+{
+	OnSpawned ();
+}
+
 function OnDrawGizmos ()
 {
 	Gizmos.color = Color.red;
@@ -16,10 +21,9 @@ function OnDrawGizmos ()
 
 function OnSpawned ()
 {
-	yield;
 	if (PlayerStatus.invunerable)
 	 	return;
-	 if (Random.value*100 <chanceToSpawnSomething)
+	if ((Random.value*100) <chanceToSpawnSomething)
 		PoolManager.Pools["Itens"].Spawn(probableItem[ChooseItem()].item.transform,transform.position,Quaternion.identity);
 }
 
@@ -27,12 +31,12 @@ function ChooseItem()
 {
 	var total = 0;
 	var i = 0;
-	/*for (elem in probableItem)
+	for (elem in probableItem)
 	{
-		total += elem;
-	}*/
+		total += elem.probability;
+	}
 	
-	total = probableItem.Length;
+	print (total);
 
 	var randomPoint = Random.value * total;
 
