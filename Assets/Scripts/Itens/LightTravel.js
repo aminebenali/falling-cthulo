@@ -13,6 +13,8 @@ class LightTravel extends MagneticBehaviour
 		{
 			PlayerMovement.phantomMovement = true;
 			PlayerStatus.invunerable = true;
+			super.OnTriggerEnter(other);
+
 			return;
 		}
 
