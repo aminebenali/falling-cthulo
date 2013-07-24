@@ -24,7 +24,9 @@ function OnTriggerEnter (other : Collider)
 		PoolManager.Pools["Effects"].Spawn(pickupEffect.transform, transform.position, Quaternion.identity);
 		audio.PlayOneShot(pickupSound);
 
-		if (renderer)
+		if (!renderer)
+			myRenderer = GetComponentInChildren(Renderer);
+		if (!myRenderer)
 			myRenderer = renderer;
 		
 		myRenderer.enabled = false;		
