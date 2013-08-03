@@ -36,8 +36,6 @@ function ChooseItem()
 		total += elem.probability;
 	}
 	
-	print (total);
-
 	var randomPoint = Random.value * total;
 
 	for (i = 0; i < probableItem.Length; i++) {
