@@ -33,10 +33,10 @@ class MagneticBehaviour extends ItemBehaviour
 			DespawnItem ();
 	}
 	
-	function FixedUpdate ()
+	function LateUpdate ()
 	{
 		if (withPlayer)
-			transform.position = playerPosition.position + 3*Vector3.forward;
+			transform.position = playerPosition.position + 2*Vector3.forward;
 	
 		if (atractedItemTransform)
 		{	
@@ -55,7 +55,6 @@ class MagneticBehaviour extends ItemBehaviour
 	function OnTriggerEnter (other : Collider)
 	{
 		super.OnTriggerEnter(other);
-		print (withPlayer);
 
 		if (!withPlayer)
 		{
@@ -66,11 +65,10 @@ class MagneticBehaviour extends ItemBehaviour
 				sphereCollider.radius = 8;
 				playerPosition = other.transform;
 				return;
-			}
-			
+			}			
 		}
-		
-		atractedItemTransform = other.transform;
+		else
+			atractedItemTransform = other.transform;
 	}
 	
 	function OnSpawned ()

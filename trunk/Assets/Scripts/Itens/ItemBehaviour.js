@@ -23,11 +23,15 @@ function OnTriggerEnter (other : Collider)
 	{
 		PoolManager.Pools["Effects"].Spawn(pickupEffect.transform, transform.position, Quaternion.identity);
 		audio.PlayOneShot(pickupSound);
-
-		if (!renderer)
-			myRenderer = GetComponentInChildren(Renderer);
+		
 		if (!myRenderer)
-			myRenderer = renderer;
+		{
+			if (!renderer)
+				myRenderer = GetComponentInChildren(Renderer);
+			else
+				myRenderer = renderer;
+
+		}
 		
 		myRenderer.enabled = false;		
 	}
@@ -35,6 +39,10 @@ function OnTriggerEnter (other : Collider)
 
 function OnSpawned ()
 {
-	if (myRenderer)
-		myRenderer.enabled = true;
+	if (!renderer)
+		myRenderer = GetComponentInChildren(Renderer);
+	if (!myRenderer)
+		myRenderer = renderer;
+	
+	myRenderer.enabled = true;
 }
