@@ -178,8 +178,10 @@ public class CharacterGenerator
 			if (database == null)
 				database = new WWW(AssetbundleBaseURL + "CharacterElementDatabase.assetbundle");
 
-			if (sortedElements != null) return true;
-			if (!database.isDone) return false;
+			if (sortedElements != null)
+				return true;
+			if (!database.isDone)
+				return false;
 
 			CharacterElementHolder ceh = (CharacterElementHolder) database.assetBundle.mainAsset;
 

@@ -2,6 +2,37 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+	
+public class ExportAssetBundles
+{
+	[MenuItem("AssetBundles/Build AssetBundle From Selection - Track dependencies")]
+	static void ExportResource ()
+	{
+		// Bring up save panel
+		string path = EditorUtility.SaveFilePanel ("Save Resource", "", "New Resource", "unity3d");
+		if (path.Length != 0)
+		{
+			// Build the resource file from the active selection.
+			Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
+			BuildPipeline.BuildAssetBundle(Selection.activeObject, selection, path, 
+            		     BuildAssetBundleOptions.CollectDependencies | BuildAssetBundleOptions.CompleteAssets);
+			Selection.objects = selection;
+		}
+	}
+	
+	[MenuItem("AssetBundles/Build AssetBundle From Selection - No dependency tracking")]
+	static void ExportResourceNoTrack ()
+	{
+		// Bring up save panel
+		string path = EditorUtility.SaveFilePanel ("Save Resource", "", "New Resource", "unity3d");
+		if (path.Length != 0)
+		{
+			// Build the resource file from the active selection.
+			BuildPipeline.BuildAssetBundle(Selection.activeObject, Selection.objects, path);
+		}
+	}
+}
+
 
 class CreateAssetbundles
 {
@@ -9,6 +40,9 @@ class CreateAssetbundles
     // found in any selected character fbx, and adds any materials that
     // are intended to be used by the specific SkinnedMeshRenderer.
     [MenuItem("Character Generator/Create Assetbundles")]
+	
+	
+	
     static void Execute()
     {
         bool createdBundle = false;
@@ -26,7 +60,6 @@ class CreateAssetbundles
             // Create a directory to store the generated assetbundles.
             if (!Directory.Exists(AssetbundlePath))
                 Directory.CreateDirectory(AssetbundlePath);
-
 
             // Delete existing assetbundles for current character.
             string[] existingAssetbundles = Directory.GetFiles(AssetbundlePath);
