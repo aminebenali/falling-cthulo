@@ -1,15 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelManager.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerMovement.js">
     <Files>
-      <File FileName="Assets\Plugins\PathologicalGames\PoolManager\SpawnPool.cs" Line="405" Column="1" />
-      <File FileName="Assets\Scripts\LevelManager.js" Line="232" Column="10" />
-      <File FileName="Assets\Scripts\Itens\LightTravel.js" Line="1" Column="2" />
-      <File FileName="Assets\Scripts\Itens\GenericItem.js" Line="43" Column="13" />
-      <File FileName="Assets\Scripts\Itens\ItemBehaviour.js" Line="25" Column="29" />
-      <File FileName="Assets\Scripts\Itens\MagneticBehaviour.js" Line="21" Column="1" />
-      <File FileName="Assets\Scripts\Itens\MagneticCoin.js" Line="14" Column="21" />
-      <File FileName="Assets\Scripts\Menu\Retry.js" Line="14" Column="23" />
+      <File FileName="Assets\BundleCreator\Scripts\AssetBundleManager.cs" Line="278" Column="1" />
+      <File FileName="Assets\BundleCreator\Scripts\LoadBundlesScene.cs" Line="38" Column="1" />
+      <File FileName="Assets\BundleCreator\Scripts\Editor\AssetBundleWindow.cs" Line="144" Column="37" />
+      <File FileName="Assets\BundleCreator\Scripts\Editor\CreateAssetBundles.cs" Line="322" Column="64" />
+      <File FileName="Assets\BundleCreator\Scripts\Editor\ClearCache.cs" Line="18" Column="6" />
+      <File FileName="Assets\BundleCreator\Scripts\Editor\AssetBundleContent.cs" Line="39" Column="1" />
+      <File FileName="Assets\Scripts\PlayerMovement.js" Line="1" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
