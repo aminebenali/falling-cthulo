@@ -1,37 +1,45 @@
 fileFormatVersion: 2
-guid: d43b6921854a65046ae1c98f969b2b70
+guid: cec80a4423adc1546989221eeec0fd83
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
     100000: //RootNode
     100002: group
     100004: group1
-    100006: pasted__group
-    100008: pasted__pasted__pTorus1
-    100010: pasted__pTorus1
-    100012: polySurface1
-    100014: polySurface2
-    100016: pTorus1
-    100018: transform1
-    100020: transform2
-    100022: transform3
-    100024: transform4
+    100006: group2
+    100008: pasted__group
+    100010: pasted__group 1
+    100012: pasted__pasted__pCylinder1
+    100014: pasted__pasted__pCylinder1 1
+    100016: pasted__pCylinder1
+    100018: pCylinder1
+    100020: polySurface1
+    100022: transform1
+    100024: transform2
+    100026: transform3
+    100028: transform4
     400000: //RootNode
     400002: group
     400004: group1
-    400006: pasted__group
-    400008: pasted__pasted__pTorus1
-    400010: pasted__pTorus1
-    400012: polySurface1
-    400014: polySurface2
-    400016: pTorus1
-    400018: transform1
-    400020: transform2
-    400022: transform3
-    400024: transform4
-    2300000: polySurface2
-    3300000: polySurface2
-    4300000: polySurface2
+    400006: group2
+    400008: pasted__group
+    400010: pasted__group 1
+    400012: pasted__pasted__pCylinder1
+    400014: pasted__pasted__pCylinder1 1
+    400016: pasted__pCylinder1
+    400018: pCylinder1
+    400020: polySurface1
+    400022: transform1
+    400024: transform2
+    400026: transform3
+    400028: transform4
+    2300000: polySurface1
+    2300002: //RootNode
+    3300000: polySurface1
+    3300002: //RootNode
+    4300000: polySurface1
+    6400000: polySurface1
+    6400002: //RootNode
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -49,7 +57,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 2.29999995
+    globalScale: 1.5
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
