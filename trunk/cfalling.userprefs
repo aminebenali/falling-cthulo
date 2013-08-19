@@ -1,7 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Itens\GenericItem.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Rotate.js">
     <Files>
+      <File FileName="Assets\Scripts\Rotate.js" Line="26" Column="2" />
       <File FileName="Assets\Scripts\Itens\GenericItem.js" Line="26" Column="11" />
       <File FileName="Assets\Plugins\Editor\FBXPostprocessor.cs" Line="10" Column="8" />
     </Files>
