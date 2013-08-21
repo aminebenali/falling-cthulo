@@ -13,6 +13,15 @@ class LightTravel extends MagneticBehaviour
 	{
 		grayScaleEffect = Camera.mainCamera.GetComponent(GrayscaleEffect);
 		grayScaleEffect.enabled = false;
+		
+		twirlEffect = Camera.mainCamera.GetComponent(TwirlEffect);
+		twirlEffect.enabled = false;
+	}
+	
+	function Update ()
+	{
+		if (twirlEffect.enabled)
+			twirlEffect.angle ++;
 	}
 	
 	function OnTriggerEnter (other : Collider)
@@ -37,6 +46,7 @@ class LightTravel extends MagneticBehaviour
 		PlayerMovement.phantomMovement = false;
 		PlayerStatus.invunerable = false;
 		grayScaleEffect.enabled = false;
+		twirlEffect.enabled = false;
 
 		super.DespawnItem ();
 	}
@@ -47,5 +57,6 @@ class LightTravel extends MagneticBehaviour
 		PlayerStatus.invunerable = true;
 			
 		grayScaleEffect.enabled = true;
+		twirlEffect.enabled = true;
 	}
 }

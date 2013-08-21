@@ -22,7 +22,6 @@ var previousCharButton : GUITexture;
 private var generator : CharacterGenerator;
 private var usingLatestConfig : boolean;
 private var newCharacterRequested : boolean = true;
-private var firstCharacter : boolean = true;
 
 private var retry : GameObject;
 private var quit : GameObject;
@@ -56,8 +55,8 @@ function Start ()
 	for (var i : int = 0; i<buoyanceComponents.Length;i++)
         buoyance[i] = buoyanceComponents[i] as Buoyance;
 
-    while (!CharacterGenerator.ReadyToUse)
-		yield;
+    //while (!CharacterGenerator.ReadyToUse)
+	//	yield;
 		    
     generator = CharacterGenerator.CreateWithRandomConfig("Cthulho");
 

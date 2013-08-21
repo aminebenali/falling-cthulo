@@ -14,7 +14,7 @@ var gravity : float = 10.0;//Gravity Speed Control
 var xConstrait : float = 2.5; //Constrait distance on X axis
 var yConstrait : float = 2.5; //Constrait distance on Y axis
 
-var cThulo : GameObject; //cThulo model reference
+private var playerModel : GameObject; //player model reference
 
 var constrait : boolean = false; //Turn On and Turn Off constrait
 
@@ -37,8 +37,9 @@ function Start ()
 	finalGravity = gravity;
 	controller = GetComponent(CharacterController);
 	myTransform = transform;
-	cThulo = GameObject.Find("char_cthulhu_anim");
 	anim = GetComponentInChildren(Animator);
+	playerModel = anim.gameObject;
+
 }
 
 function Update()
@@ -74,7 +75,7 @@ function Update()
 	else
 		moveDirection = Vector3(xAcc * xSpeed, yAcc*ySpeed, zSpeed);
 
-    cThulo.transform.LookAt (moveDirection + myTransform.position + Vector3.forward);
+    playerModel.transform.LookAt (moveDirection + myTransform.position + Vector3.forward);
     moveDirection = myTransform.TransformDirection(moveDirection);
 	
     // Apply gravity

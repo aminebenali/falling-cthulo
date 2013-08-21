@@ -8,10 +8,6 @@ class ProbableItem
 var chanceToSpawnSomething : float;
 var probableItem : ProbableItem[];
 
-function Start ()
-{
-	OnSpawned ();
-}
 
 function OnDrawGizmos ()
 {

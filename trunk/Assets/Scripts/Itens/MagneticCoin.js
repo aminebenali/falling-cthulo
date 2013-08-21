@@ -11,7 +11,6 @@ class MagneticCoin extends MagneticBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
-			print ("Player");
 			super.OnTriggerEnter(other);
 		}
 	

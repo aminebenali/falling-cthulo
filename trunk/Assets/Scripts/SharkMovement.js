@@ -1,21 +1,41 @@
 #pragma strict
-private var startRotate : boolean;
-function Update ()
+var maxDistanceToMove : float = 3;
+var speed = 4.0;
+private var parentPosition : Vector3;
+private var targetPoint : Vector3 = targetPoint;
+private var targetRotation : Quaternion;
+private var myTransform : Transform; //Caching component lookup - Optimization Issue
+
+
+function FixedUpdate ()
 {
-	transform.Translate(2 * transform.forward * Time.deltaTime);
-	if (startRotate)
-		transform.Rotate (0,15 * Time.deltaTime,0);
+	if (myTransform.position.y < -4)
+		rigidbody.velocity.y = 1;
+	if (myTransform.position.x < -20)
+		rigidbody.velocity.x = 1;
+	if (myTransform.position.x > 20)
+		rigidbody.velocity.x = -1;
+	if (Vector3.Distance (targetPoint, myTransform.position) >  maxDistanceToMove) 
+    {
+    	targetPoint = targetPoint + Random.onUnitSphere * 2;
+    	targetRotation = Quaternion.LookRotation(targetPoint - myTransform.position);
+    }
+	    
+   	myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, speed * Time.deltaTime);
+   	rigidbody.AddForce(speed * transform.forward * Time.deltaTime, ForceMode.VelocityChange);
 }
+	
 
 function OnTriggerEnter (collider : Collider)
 {
 	if (collider.tag == "Player")
-		transform.LookAt(collider.transform);
-	else
-		startRotate = true;
+		targetPoint = collider.transform.position;
 }
 
-function OnTriggerExit ()
+function OnSpawned ()
 {
-	startRotate = false;
+	myTransform = transform;
+	parentPosition = myTransform.parent.transform.position;
+	myTransform.position = parentPosition;
+	targetPoint = parentPosition;
 }
