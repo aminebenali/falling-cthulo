@@ -19,9 +19,10 @@ public var deadBody : Transform;//deadbody transform
 private var turbilhaoDeVelocidade : ParticleSystem; //velocity feedback
 private var turbilhaoDeSuperVelocidade : ParticleSystem; //velocity feedback
 private var miasma : ParticleSystem; //Life feedback
+private var burningEffect : ParticleSystem;
+
 private var controller : CharacterController;//Character Controller Reference
 private var myTransform : Transform;//Caching component lookup - Optimization Issue
-
 
 @script AddComponentMenu("Characters/Player Status");
 
@@ -30,6 +31,7 @@ function Awake ()
  	myTransform = transform;
     controller = GetComponent(CharacterController);
  	miasma = GameObject.Find("miasma").GetComponent(ParticleSystem);
+ 	burningEffect = GameObject.Find("Burning").GetComponent(ParticleSystem);
     turbilhaoDeVelocidade = GameObject.Find("TurbilhaoDeBolhas").GetComponent(ParticleSystem);
     turbilhaoDeSuperVelocidade = GameObject.Find("Turbilhao2").GetComponent(ParticleSystem);
 	cthuloAlive = GameObject.FindObjectOfType(SkinnedMeshRenderer);
@@ -70,7 +72,19 @@ function Update ()
         if (turbilhaoDeSuperVelocidade.isPlaying)
         	turbilhaoDeSuperVelocidade.Stop();
     }
-
+    
+	if (myTransform.position.y > 10)
+	{
+		if (!burningEffect.active)
+		    burningEffect.Play();
+		burningEffect.emissionRate = 10- (1 - Mathf.Clamp01((myTransform.position.y - 10)/5));
+		life -= 1;
+	}
+	else
+	{
+		burningEffect.Stop();
+	}
+		
 }
 
 function DisableParticles ()
@@ -78,12 +92,15 @@ function DisableParticles ()
    	miasma.Stop();
    	turbilhaoDeSuperVelocidade.Stop ();
    	turbilhaoDeVelocidade.Stop ();
+   	//burningEffect.Stop();
 }
 
 function EnableParticles ()
 {
 	miasma.Play();
 	turbilhaoDeVelocidade.Play();
+	burningEffect.Play();
+
 }
 
 function OnDeath ()

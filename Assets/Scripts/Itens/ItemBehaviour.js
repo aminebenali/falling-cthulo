@@ -9,21 +9,13 @@ var pickupSound : AudioClip;
 var pickupEffect : GameObject;
 protected var myRenderer : Renderer;
 
-function Start ()
-{
-	if (!renderer)
-		myRenderer = GetComponentInChildren(Renderer);
-	else
-		myRenderer = renderer;
-}
-
 function OnTriggerEnter (other : Collider)
 {
 	if (other.CompareTag("Player"))
 	{
 		PoolManager.Pools["Effects"].Spawn(pickupEffect.transform, transform.position, Quaternion.identity);
 		audio.PlayOneShot(pickupSound);
-		
+
 		if (!myRenderer)
 		{
 			if (!renderer)
@@ -32,7 +24,6 @@ function OnTriggerEnter (other : Collider)
 				myRenderer = renderer;
 
 		}
-		
 		myRenderer.enabled = false;		
 	}
 }
@@ -43,6 +34,5 @@ function OnSpawned ()
 		myRenderer = GetComponentInChildren(Renderer);
 	if (!myRenderer)
 		myRenderer = renderer;
-	
 	myRenderer.enabled = true;
 }

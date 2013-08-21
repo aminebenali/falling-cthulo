@@ -123,12 +123,12 @@ function OnMouseUpAsButton ()
 			SendMessageUpwards("OnClickNextChar");
 		break;
 		case ButtonFunction.Retry:
-			SendMessageUpwards("OnClickRetry");
+			//SendMessageUpwards("OnClickRetry");
 			LevelManager.gameStatus = GameStatus.StartMenu;
 			levelManager.Restart ();
 		break;
 		case ButtonFunction.Quit:
-			SendMessageUpwards("OnClickQuit");
+			//SendMessageUpwards("OnClickQuit");
 			Application.Quit();
 		break;
 	}

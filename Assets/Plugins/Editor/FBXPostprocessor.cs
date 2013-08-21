@@ -1,6 +1,6 @@
 using UnityEditor;
 using UnityEngine;
-
+/*
 class FBXPostprocessor : AssetPostprocessor
 {
     // This method is called just before importing an FBX.
@@ -38,4 +38,4 @@ class FBXPostprocessor : AssetPostprocessor
                 Object.DestroyImmediate(o);
         }
     }
-}
+}*/

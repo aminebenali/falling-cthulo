@@ -6,9 +6,10 @@
 
 #pragma strict
 
-var startOfuscation : int = 5;
-var maxHeight : int = 10;
+var startOfuscation : int = 10;
+var maxHeight : int = 15;
 
+var bloom : Bloom;
 var myMaterial : Material;//Caching component lookup - Optimization Issue
 var myTransform : Transform;//Caching component lookup - Optimization Issue
 
@@ -16,13 +17,12 @@ var myTransform : Transform;//Caching component lookup - Optimization Issue
 
 function Start ()
 {
+	bloom = Camera.mainCamera.GetComponent(Bloom);
 	myMaterial = renderer.material;
 	myTransform = transform;
 }
 function Update ()
 {
 	if (myTransform.position.y > startOfuscation)
-		myMaterial.color.a = (myTransform.position.y - startOfuscation)/maxHeight;
-	else
-		myMaterial.color.a = 0;
+		bloom.bloomThreshhold = 1 - Mathf.Clamp01((myTransform.position.y - startOfuscation)/5);
 }
