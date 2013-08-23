@@ -22,6 +22,8 @@ class LightTravel extends MagneticBehaviour
 	{
 		if (twirlEffect.enabled)
 			twirlEffect.angle ++;
+		super.Update();
+
 	}
 	
 	function OnTriggerEnter (other : Collider)
@@ -47,7 +49,6 @@ class LightTravel extends MagneticBehaviour
 		PlayerStatus.invunerable = false;
 		grayScaleEffect.enabled = false;
 		twirlEffect.enabled = false;
-
 		super.DespawnItem ();
 	}
 	

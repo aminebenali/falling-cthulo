@@ -20,6 +20,8 @@ private var turbilhaoDeVelocidade : ParticleSystem; //velocity feedback
 private var turbilhaoDeSuperVelocidade : ParticleSystem; //velocity feedback
 private var miasma : ParticleSystem; //Life feedback
 private var burningEffect : ParticleSystem;
+var bloom : Bloom;
+
 
 private var controller : CharacterController;//Character Controller Reference
 private var myTransform : Transform;//Caching component lookup - Optimization Issue
@@ -42,6 +44,8 @@ function Start ()
 {
 	Reset ();
 	invunerable = true;
+	bloom = Camera.mainCamera.GetComponent(Bloom);
+
  //carregar elementos salvos
 }
 
@@ -63,7 +67,7 @@ function Update ()
     
     if (velocity > 60)
     {
-    	if (!turbilhaoDeSuperVelocidade.active)
+    	if (!turbilhaoDeSuperVelocidade.isStopped)
     		turbilhaoDeSuperVelocidade.Play();
     	turbilhaoDeSuperVelocidade.emissionRate = velocity - 60;
     }
@@ -75,8 +79,11 @@ function Update ()
     
 	if (myTransform.position.y > 10)
 	{
-		if (!burningEffect.active)
+		bloom.bloomThreshhold = 1 - Mathf.Clamp01((myTransform.position.y - 10)/5);
+		if (burningEffect.isStopped)
+		{
 		    burningEffect.Play();
+		}
 		burningEffect.emissionRate = 10- (1 - Mathf.Clamp01((myTransform.position.y - 10)/5));
 		life -= 1;
 	}
@@ -92,7 +99,7 @@ function DisableParticles ()
    	miasma.Stop();
    	turbilhaoDeSuperVelocidade.Stop ();
    	turbilhaoDeVelocidade.Stop ();
-   	//burningEffect.Stop();
+   	burningEffect.Stop();
 }
 
 function EnableParticles ()

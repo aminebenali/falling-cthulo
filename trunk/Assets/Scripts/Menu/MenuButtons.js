@@ -13,6 +13,7 @@ var creditsBubbles : GameObject[];//Array with bubles from credits
 private var myRenderer : Renderer;//Caching component lookup - Optimization Issue
 private var myGUITexture : GUITexture;
 private var levelManager : LevelManager;
+private var menuManager : MenuManager;
 private var originalShader : Shader;
 private var alternativeShader : Shader;
 
@@ -33,6 +34,7 @@ function Start ()
 
 	alternativeShader = Shader.Find("Transparent/Diffuse");
 	levelManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent(LevelManager);
+	menuManager = GameObject.FindGameObjectWithTag("MenuManager").GetComponent(MenuManager);
 }
 
 function OnMouseEnter ()
@@ -123,7 +125,7 @@ function OnMouseUpAsButton ()
 			SendMessageUpwards("OnClickNextChar");
 		break;
 		case ButtonFunction.Retry:
-			//SendMessageUpwards("OnClickRetry");
+			menuManager.OnClickRetry();
 			LevelManager.gameStatus = GameStatus.StartMenu;
 			levelManager.Restart ();
 		break;

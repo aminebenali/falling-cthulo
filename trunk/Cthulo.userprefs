@@ -1,17 +1,26 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerStatus.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Itens\ItemBehaviour.js">
     <Files>
-      <File FileName="Assets\Plugins\PathologicalGames\PoolManager\SpawnPool.cs" Line="1873" Column="1" />
-      <File FileName="Assets\Scripts\SharkMovement.js" Line="27" Column="60" />
+      <File FileName="Assets\Scripts\Itens\ItemBehaviour.js" Line="31" Column="7" />
+      <File FileName="Assets\Scripts\Itens\CoinBehaviour.js" Line="57" Column="1" />
+      <File FileName="Assets\Scripts\PlayerStatus.js" Line="126" Column="2" />
+      <File FileName="Assets\Plugins\PathologicalGames\PoolManager\SpawnPool.cs" Line="405" Column="40" />
+      <File FileName="Assets\Scripts\SharkMovement.js" Line="45" Column="2" />
       <File FileName="Assets\Scripts\PlayerMovementOnMenu.js" Line="49" Column="2" />
       <File FileName="Assets\Scripts\Itens\MagneticCoin.js" Line="8" Column="45" />
       <File FileName="Assets\Scripts\Itens\Bomb.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerMovement.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerMovement.js" Line="115" Column="67" />
+      <File FileName="Assets\Scripts\Itens\LightTravel.js" Line="1" Column="2" />
+      <File FileName="Assets\Scripts\Menu\MenuManager.js" Line="235" Column="1" />
       <File FileName="Assets\Scripts\SmoothFollowCthulo.js" Line="41" Column="2" />
-      <File FileName="Assets\Scripts\PlayerStatus.js" Line="81" Column="13" />
-      <File FileName="Assets\Scripts\Ofuscator.js" Line="26" Column="1" />
       <File FileName="Assets\Standard Assets\Image Effects (Pro Only)\Bloom.js" Line="46" Column="28" />
+      <File FileName="Assets\Standard Assets\Image Effects (Pro Only)\TwirlEffect.cs" Line="15" Column="1" />
+      <File FileName="Assets\Scripts\Itens\MagneticBehaviour.js" Line="17" Column="31" />
+      <File FileName="Assets\Scripts\Menu\MenuButtons.js" Line="99" Column="2" />
+      <File FileName="Assets\Scripts\Itens\Deboost.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Itens\GenericItem.js" Line="23" Column="1" />
+      <File FileName="Assets\Scripts\LevelManager.js" Line="227" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
