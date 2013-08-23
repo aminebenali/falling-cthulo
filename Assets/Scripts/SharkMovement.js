@@ -2,7 +2,7 @@
 var maxDistanceToMove : float = 3;
 var speed = 4.0;
 private var parentPosition : Vector3;
-private var targetPoint : Vector3 = targetPoint;
+private var targetPoint : Vector3;
 private var targetRotation : Quaternion;
 private var myTransform : Transform; //Caching component lookup - Optimization Issue
 
@@ -29,7 +29,19 @@ function FixedUpdate ()
 function OnTriggerEnter (collider : Collider)
 {
 	if (collider.tag == "Player")
-		targetPoint = collider.transform.position;
+	{
+		speed = 10;
+		targetPoint = collider.transform.position + collider.transform.forward;
+	}
+}
+
+function OnTriggerExit (collider : Collider)
+{
+	if (collider.tag == "Player")
+	{
+		speed = 4;
+		targetPoint = parentPosition;
+	}
 }
 
 function OnSpawned ()

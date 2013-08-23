@@ -224,8 +224,8 @@ function CreateMenu ()
 
 function Reset ()
 {
+	print ("Reset");
 	PoolManager.Pools["Obstacles"].Spawn(levels[actualLevelIndex].obstacleParts[Random.Range(0,levels[actualLevelIndex].obstacleParts.Length)].obstacle,Vector3(0,-5,Random.Range(levels[actualLevelIndex].startPoint+10,levels[actualLevelIndex].startPoint + 50)),Quaternion.identity);
-	yield;
 	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,levels[actualLevelIndex].startPoint-250),Quaternion.identity);
 	PoolManager.Pools["Grounds"].Spawn(levels[actualLevelIndex].groundParts[Random.Range(0,levels[actualLevelIndex].groundParts.Length)],Vector3(0,-5,levels[actualLevelIndex].startPoint),Quaternion.identity);
 	PoolManager.Pools["Mountains"].Spawn(levels[actualLevelIndex].mountainParts[Random.Range(0,levels[actualLevelIndex].mountainParts.Length)],Vector3(0, -5 ,levels[actualLevelIndex].startPoint),Quaternion.identity);

@@ -14,7 +14,7 @@ class MagneticBehaviour extends ItemBehaviour
 	
 	public var colliderRadius : float = 10;
 	
-	public var duration:float = 10;
+	public var duration:float = 8;
 	public var timer:float = 0;
 	
 	private var withPlayer : boolean;
@@ -79,7 +79,6 @@ class MagneticBehaviour extends ItemBehaviour
 	
 	function DespawnItem ()
 	{
-		print (gameObject.name + " despawned");
 		withPlayer = false;
 		PoolManager.Pools["Itens"].Despawn(transform);
 	}
